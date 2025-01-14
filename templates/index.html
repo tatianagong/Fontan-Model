@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Interactive Parameter Input</title>
+    <link rel="stylesheet" href="/static/styles.css">
+</head>
+<body>
+    <h1>Input Patient Vitals</h1>
+    <form id="parameterForm">
+        <!--Heart Rate Slider-->
+        <label for="HR">Heart Rate:</label>
+        <input type="range" id="HR" name="HR" min="50" max="150" step="1" value="100" oninput="updateValue('HRValue', this.value)">
+        <span id="HRValue">100</span><br><br>
+
+        <!--UVR Slider-->
+        <label for="UVR">Upper Vascular Resistance:</label>
+        <input type="range" id="UVR" name="UVR" min="30" max="60" step="1" value="45" oninput="updateValue('UVRValue', this.value)">
+        <span id="UVRValue">45</span><br><br>
+
+        <!--LVR Slider-->
+        <label for="LVR">Lower Vascular Resistance:</label>
+        <input type="range" id="LVR" name="LVR" min="20" max="50" step="1" value="35" oninput="updateValue('LVRValue', this.value)">
+        <span id="LVRValue">35</span><br><br>
+
+         <!--PVR Slider-->
+         <label for="PVR">Pulmonary Vascular Resistance:</label>
+        <input type="range" id="PVR" name="PVR" min="5" max="20" step="1" value="10" oninput="updateValue('PVRValue', this.value)">
+        <span id="PVRValue">10</span><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+    <p id="result"></p>
+    <script src="/static/script.js"></script>
+</body>
+</html>
