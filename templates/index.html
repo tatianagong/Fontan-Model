@@ -3,11 +3,11 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Parameter Input</title>
+    <title>Interactive Parameter Inputs</title>
     <link rel="stylesheet" href="/static/styles.css">
 </head>
 <body>
-    <h1>Input Patient Vitals</h1>
+    <h1>Manually Input Patient Vitals</h1>
     <form id="parameterForm">
         <!--Heart Rate Slider-->
         <label for="HR">Heart Rate:</label>
@@ -24,10 +24,30 @@
         <input type="range" id="LVR" name="LVR" min="20" max="50" step="1" value="35" oninput="updateValue('LVRValue', this.value)">
         <span id="LVRValue">35</span><br><br>
 
-         <!--PVR Slider-->
-         <label for="PVR">Pulmonary Vascular Resistance:</label>
+        <!--PVR Slider-->
+        <label for="PVR">Pulmonary Vascular Resistance:</label>
         <input type="range" id="PVR" name="PVR" min="5" max="20" step="1" value="10" oninput="updateValue('PVRValue', this.value)">
         <span id="PVRValue">10</span><br><br>
+
+        <!--S_sa Slider-->
+        <label for="S_sa">Systemic Artery Saturation:</label>
+        <input type="range" id="S_sa" name="S_sa" min="0.98" max="1" step="0.01" value="0.99" oninput="updateValue('S_saValue', this.value)">
+        <span id="S_saValue">10</span><br><br>
+
+        <!--Hb Slider-->
+        <label for="Hb">Hemoglobin:</label>
+        <input type="range" id="Hb" name="Hb" min="7" max="22" step="0.1" value="15" oninput="updateValue('HbValue', this.value)">
+        <span id="HbValue">10</span><br><br>
+
+        <!--CVO2u Slider-->
+        <label for="CVO2u">Oxygen Consumption of the Upper Body:</label>
+        <input type="range" id="CVO2u" name="CVO2u" min="35" max="105" step="1" value="70" oninput="updateValue('CVO2uValue', this.value)">
+        <span id="CVO2uValue">10</span><br><br>
+
+        <!--CVO2l Slider-->
+        <label for="CVO2l">Oxygen Consumption of the Lower Body:</label>
+        <input type="range" id="CVO2l" name="CVO2l" min="25" max="75" step="1" value="50" oninput="updateValue('CVO2lValue', this.value)">
+        <span id="CVO2lValue">10</span><br><br>
 
         <button type="submit">Submit</button>
     </form>

@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify
-from hlhs_model import fun_flows, fun_sat, C_d, C_s, S_sa, CVO2u, CVO2l, Hb, C_sa, C_pv, C_pa
+from hlhs_model import fun_flows, fun_sat, C_d, C_s, C_sa, C_pv, C_pa
 import scipy.optimize
 
 app = Flask(__name__)
@@ -17,6 +17,10 @@ def process():
     UVR = float(data.get("UVR"))
     LVR = float(data.get("LVR"))
     PVR = float(data.get("PVR"))
+    S_sa = float(data.get("S_sa"))
+    Hb = float(data.get("Hb"))
+    CVO2u = float(data.get("CVO2u"))
+    CVO2l = float(data.get("CVO2l"))
 
     param_flows = ( UVR, LVR, PVR, HR, C_d, C_s, C_sa, C_pv, C_pa)
     z0_flows = (3.1, 1.5, 1.5, 3.2, 75, 26, 2)

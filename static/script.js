@@ -12,6 +12,10 @@ document.getElementById('parameterForm').addEventListener('submit', function(eve
     const UVR = document.getElementById('UVR').value;
     const LVR = document.getElementById('LVR').value;
     const PVR = document.getElementById('PVR').value;
+    const S_sa = document.getElementById('S_sa').value;
+    const Hb = document.getElementById('Hb').value;
+    const CVO2u = document.getElementById('CVO2u').value;
+    const CVO2l = document.getElementById('CVO2l').value;
 
     // Send the parameters to the backend
     fetch('/process', {
@@ -19,7 +23,7 @@ document.getElementById('parameterForm').addEventListener('submit', function(eve
         headers: {
             'Content-Type': 'application/json'
         },
-        body: JSON.stringify({ HR, UVR, LVR, PVR }) // Sending multiple parameters
+        body: JSON.stringify({ HR, UVR, LVR, PVR, S_sa, Hb, CVO2u, CVO2l }) // Sending multiple parameters
     })
     .then(response => {
         if (!response.ok) {
@@ -34,6 +38,8 @@ document.getElementById('parameterForm').addEventListener('submit', function(eve
             <p>Cardiac Output: ${data.Q_v}</p>
             <p>Blood Flow into the Upper Body: ${data.Q_u}</p>
             <p>Blood Flow into the Lower Body: ${data.Q_l}</p>
+            <p>Blood Flow into the Lungs: ${data.Q_p}</p>
+            <p>Pressure of the Systemic Artery: ${data.P_sa}</p>
             <p>Oxygen Extraction Ratio: ${data.OER}</p>
         `;
     })
