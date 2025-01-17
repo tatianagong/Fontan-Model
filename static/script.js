@@ -35,11 +35,11 @@ document.getElementById('parameterForm').addEventListener('submit', function(eve
         // Display the results
         const resultDiv = document.getElementById('result');
         resultDiv.innerHTML = `
-            <p>Cardiac Output: ${data.Q_v}</p>
-            <p>Blood Flow into the Upper Body: ${data.Q_u}</p>
-            <p>Blood Flow into the Lower Body: ${data.Q_l}</p>
-            <p>Blood Flow into the Lungs: ${data.Q_p}</p>
-            <p>Pressure of the Systemic Artery: ${data.P_sa}</p>
+            <p>Cardiac Output (L/min): ${data.Q_v}</p>
+            <p>Blood Flow into the Upper Body (L/min): ${data.Q_u}</p>
+            <p>Blood Flow into the Lower Body (L/min): ${data.Q_l}</p>
+            <p>Blood Flow into the Lungs (L/min): ${data.Q_p}</p>
+            <p>Pressure of the Systemic Artery (mmHg): ${data.P_sa}</p>
             <p>Oxygen Extraction Ratio: ${data.OER}</p>
         `;
     })
