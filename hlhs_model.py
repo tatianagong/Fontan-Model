@@ -2,9 +2,9 @@
 import scipy.optimize
 
 # inputs
-UVR = 45
-LVR = 35
-PVR = 10
+UVR = 45/1.3
+LVR = 35/1.3
+PVR = 10/1.3
 HR = 150 
 S_sa = 0.99 # give narrow interval: .98 - 1 assuming lungs are healthy
 Hb = 15.0
