@@ -12,9 +12,8 @@ CVO2u = 70
 CVO2l = 50
 
 # built-in
-C_d = 1.9   # eventually have different values e.g. decreased contractility, described qualitatively
-C_s = .05 
-
+C_d = 2/100   # eventually have different values e.g. decreased contractility, described qualitatively
+C_s = .01/100 
 C_sa = 1/135
 C_pv = 30 * C_sa
 C_pa = 2 * C_sa
