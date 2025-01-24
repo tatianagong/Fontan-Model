@@ -47,3 +47,37 @@ document.getElementById('parameterForm').addEventListener('submit', function(eve
         console.error('Error:', error);
     });
 });
+
+// Add click functionality to the Fontan diagram
+const image = document.getElementById('clickable-image');
+image.addEventListener('click', () => {});
+
+// Modals
+document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('popup-modal');
+    const modalText = document.getElementById('modal-text');
+    const closeButton = document.getElementById('modal-close');
+
+    // Add click listeners to each area
+    document.querySelectorAll('area').forEach((area) => {
+        area.addEventListener('click', (e) => {
+            e.preventDefault(); // Prevent navigation (if href is empty)
+            // get custom content from data-content
+            const content = area.getAttribute('data-content');
+            modalText.textContent = content; // Set dynamic content
+            modal.style.display = 'block'; // Show the modal
+        });
+    });
+
+    // Close the modal when clicking the "X" button
+    closeButton.addEventListener('click', () => {
+        modal.style.display = 'none';
+    });
+
+    // Close the modal when clicking outside the modal content
+    window.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            modal.style.display = 'none';
+        }
+    });
+});
