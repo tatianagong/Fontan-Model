@@ -44,9 +44,8 @@ form {
 }
 input[type="range"] {
     width: 100%;
-}
+    }
 
-/* Image Resizing Based on Screen Size */
 /* Image Resizing Based on Screen Size */
 .interactive-image {
     width: 60%;  /* Sets the image width to 60% of its container */
