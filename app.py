@@ -348,5 +348,44 @@ def generate_plot():
     return jsonify({'plot': plot_data})
 
 ###
+
+######
+@app.route('/generate_custom_plot')
+def generate_custom_plot():
+    # Capture the query parameters from the frontend
+    input1 = request.args.get('input1')
+    input2 = request.args.get('input2')
+    output = request.args.get('output')
+
+    # Generate a sample plot based on the selected parameters
+    # For demonstration, let's create a simple line plot based on the dropdowns
+    fig, ax = plt.subplots()
+
+    # Example plot logic: using inputs to vary the plot, replace with your actual logic
+    x = [1, 2, 3, 4, 5]
+    if input1 == "HR":
+        y = [i * 2 for i in x]  # Sample logic based on input1 (Heart Rate)
+    elif input1 == "UVR":
+        y = [i * 3 for i in x]  # Sample logic based on input1 (Upper Vascular Resistance)
+    else:
+        y = [i * 4 for i in x]  # Default example for other inputs
+
+    ax.plot(x, y, label=f'{input1} vs {input2}')
+
+    # Customize the plot with labels
+    ax.set_title(f"Plot: {input1} vs {input2}")
+    ax.set_xlabel(input1)
+    ax.set_ylabel(output)
+
+    # Convert the plot to PNG and encode it as Base64
+    img = io.BytesIO()
+    plt.savefig(img, format='png')
+    img.seek(0)
+    plot_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
+
+    # Return the plot as a JSON response
+    return jsonify({'plot': plot_base64})
+######
+
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

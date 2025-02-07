@@ -21,6 +21,11 @@ ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY
             padding: 10px;
         }
 
+        /* Second plot container styling (below second set of sliders) */
+        #secondPlotContainer {
+            margin-top: 30px;
+        }
+
         /* Left side section */
         .plot-section {
             margin-bottom: 20px;
@@ -222,7 +227,7 @@ ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY
     </div>
 
     <!-- Second Plot Section (Below the First) -->
-    <div class="plot-container new-plot-section">
+    <div class="plot-container" id="secondPlotContainer">
         <div class="dropdowns-container">
             <!-- Input Dropdown 1 -->
             <div class="dropdown-container">
@@ -268,6 +273,7 @@ ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY
             </div>
         </div>
         <button id="generatePlotButton">Generate Plot</button>
+        <div id="customPlotContainer"></div> <!-- Second plot container -->
     </div>
     <!-------------------------------------------------------------->
     
