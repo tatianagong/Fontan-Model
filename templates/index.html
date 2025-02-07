@@ -1,3 +1,7 @@
+<!--------------------------------------------------------------
+ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY THESE LINES
+---------------------------------------------------------------->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -5,6 +9,45 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Interactive Parameter Inputs</title>
     <link rel="stylesheet" href="/static/styles.css">
+
+    <!--------------------------------------------------------------->
+    <style>
+        /* Positioning the plot sections */
+        .plot-container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+        }
+
+        /* Left side section */
+        .plot-section {
+            margin-bottom: 20px;
+        }
+
+        /* New plot functionality below the first plot */
+        .new-plot-section {
+            margin-top: 40px;
+        }
+
+        .dropdowns-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .dropdown-container {
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Ensure that the dropdowns and button are aligned */
+        #generatePlotButton {
+            margin-top: 10px;
+        }
+    </style>
+    <!--------------------------------------------------------------->
+
 </head>
 <body>
     <!-- Embedded Image -->
@@ -45,7 +88,7 @@
             
             <area target="" alt="Left Pulmonary Artery" title="Left Pulmonary Artery" href="" coords="670,498,649,492,659,493,682,492,717,486,776,481,811,481,846,482,886,491,904,504,896,477,896,464,862,461,831,458,798,459,757,462,715,466,644,476,620,493,594,496,569,492,567,508,567,513,598,519,643,510,663,511" shape="poly"
             data-content="Left Pulmonary Artery: Delivers deoxygenated blood from the body to the left lung.">
-            
+
             <area target="" alt="Left Pulmonary Vein" title="Left Pulmonary Vein" href="" coords="623,526,647,539,662,551,715,559,754,565,794,568,836,568,878,561,902,554,906,529,905,509,886,527,860,536,832,542,796,543,760,542,714,537,688,533,668,527,660,514" shape="poly"
             data-content="Left Pulmonary Vein: Delivers oxygenated blood from the left lung back to the heart.">
             
@@ -56,7 +99,7 @@
             data-content="Ascending Aorta: Upward curve that occurs shortly after the aorta leaves the heart.">
             
             <area target="" alt="Aortic Arch" title="Aortic Arch" href="" coords="549,465,540,487,566,494,575,484,585,482,596,488,599,495,621,491,616,472,606,459,582,454" shape="poly"
-            data-content="Aortic Arch: Curved segment that gives the aorta its cane-like shape. It bridges the ascending and descending aorta">
+            data-content="Aortic Arch: Curved segment that gives the aorta its cane-like shape. It bridges the ascending and descending aorta.">
             
             <area target="" alt="Inferior Vena Cava" title="Inferior Vena Cava" href="" coords="504,495,486,517,501,517,510,529,522,516,530,503,521,493,512,489" shape="poly"
             data-content="Inferior Vena Cava (IVC): Delivers deoxygenated blood from the lower body to the pulmonary artery.">
@@ -145,7 +188,89 @@
 
         <button type="submit">Submit</button>
     </form>
+    
     <p id="result"></p>
+    
+    <!---------------------------------------------------------------
+    <select id="plotType">
+        <option value="CO">Cardiac Output</option>
+        <option value="Q_u">Blood Flow into the Upper Body</option>
+        <option value="Q_l">Blood Flow into the Lower Body</option>
+        <option value="Q_p">Blood Flow into the Lungs</option>
+        <option value="P_sa">Pressure of the Systemic Artery</option>
+        <option value="OER">Oxygen Extraction Ratio</option>
+    </select>
+    <button id="displayPlotButton">Display Plot</button>
+    <div id="plotContainer"></div>
+    -------------------------------------------------------------->
+    <!-------------------------------------------------------------->
+    <!-- First Plot Section -->
+    <div class="plot-container">
+        <div class="plot-section">
+            <!-- Left side: Existing Plot Dropdown -->
+            <select id="plotType">
+                <option value="CO">Cardiac Output</option>
+                <option value="Q_u">Blood Flow into the Upper Body</option>
+                <option value="Q_l">Blood Flow into the Lower Body</option>
+                <option value="Q_p">Blood Flow into the Lungs</option>
+                <option value="P_sa">Pressure of the Systemic Artery</option>
+                <option value="OER">Oxygen Extraction Ratio</option>
+            </select>
+            <button id="displayPlotButton">Display Plot</button>
+        </div>
+        <div id="plotContainer"></div> <!-- Where the plot will be displayed -->
+    </div>
+
+    <!-- Second Plot Section (Below the First) -->
+    <div class="plot-container new-plot-section">
+        <div class="dropdowns-container">
+            <!-- Input Dropdown 1 -->
+            <div class="dropdown-container">
+                <label for="inputDropdown1">Input 1:</label>
+                <select id="inputDropdown1">
+                    <option value="HR">Heart Rate</option>
+                    <option value="UVR">Upper Vascular Resistance</option>
+                    <option value="LVR">Lower Vascular Resistance</option>
+                    <option value="PVR">Pulmonary Vascular Resistance</option>
+                    <option value="S_sa">Systemic Artery Saturation</option>
+                    <option value="Hb">Hemoglobin</option>
+                    <option value="CVO2u">Upper Body Oxygen Consumption</option>
+                    <option value="CVO2l">Lower Body Oxygen Consumption</option>
+                </select>
+            </div>
+
+            <!-- Input Dropdown 2 -->
+            <div class="dropdown-container">
+                <label for="inputDropdown2">Input 2:</label>
+                <select id="inputDropdown2">
+                    <option value="HR">Heart Rate</option>
+                    <option value="UVR">Upper Vascular Resistance</option>
+                    <option value="LVR">Lower Vascular Resistance</option>
+                    <option value="PVR">Pulmonary Vascular Resistance</option>
+                    <option value="S_sa">Systemic Artery Saturation</option>
+                    <option value="Hb">Hemoglobin</option>
+                    <option value="CVO2u">Upper Body Oxygen Consumption</option>
+                    <option value="CVO2l">Lower Body Oxygen Consumption</option>
+                </select>
+            </div>
+
+            <!-- Output Dropdown -->
+            <div class="dropdown-container">
+                <label for="outputDropdown">Output:</label>
+                <select id="outputDropdown">
+                    <option value="Q_v">Cardiac Output</option>
+                    <option value="Q_u">Blood Flow into the Upper Body</option>
+                    <option value="Q_l">Blood Flow into the Lower Body</option>
+                    <option value="Q_p">Blood Flow into the Lungs</option>
+                    <option value="P_sa">Pressure of the Systemic Artery</option>
+                    <option value="OER">Oxygen Extraction Ratio</option>
+                </select>
+            </div>
+        </div>
+        <button id="generatePlotButton">Generate Plot</button>
+    </div>
+    <!-------------------------------------------------------------->
+    
     <script src="/static/script.js"></script>
 </body>
 </html>
