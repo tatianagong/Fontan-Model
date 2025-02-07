@@ -45,3 +45,29 @@ form {
 input[type="range"] {
     width: 100%;
 }
+
+/* Image Resizing Based on Screen Size */
+/* Image Resizing Based on Screen Size */
+.interactive-image {
+    width: 60%;  /* Sets the image width to 60% of its container */
+    max-width: 600px;  /* Limits the maximum width */
+    height: auto;  /* Maintains the aspect ratio */
+    display: block;  /* Ensures the image is a block element */
+    margin: 0 auto;  /* Centers the image horizontally */
+}
+
+/* Adjust the image for tablets (screen width <= 768px) */
+@media (max-width: 768px) {
+    .interactive-image {
+        width: 50%;  /* Reduces the width to 50% of its container */
+        max-width: 450px;
+    }
+}
+
+/* Further adjust for smaller screens (screen width <= 480px) */
+@media (max-width: 480px) {
+    .interactive-image {
+        width: 40%;  /* Reduces the width to 40% of its container */
+        max-width: 300px;
+    }
+}
