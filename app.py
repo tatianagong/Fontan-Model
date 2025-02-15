@@ -93,27 +93,32 @@ def generate_plot():
         normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
 
         excluded_params = {
-            "Compliance at Dia",
-            "Compliance at Sys",
-            "Compliance of Systemic Artery",
-            "Compliance of Pulmonary Vein",
-            "Compliance of Pulmonary Artery",
-            "Hemoglobin Concentration"
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
         }
 
         # Iterate over each parameter's CO values and plot them
         for param_name, cardiac_outputs in COs.items():
             if param_name not in excluded_params:
                 #####
-                baseline_value = {"Heart Rate": (100, "beats/min"),
-                                  "Upper Body Resistance": (45, "Wood Units"),
-                                  "Lower Body Resistance": (35, "Wood Units"),
-                                  "Pulmonary Resistance": (10, "Wood Units"),
-                                  "Systemic Arterial Oxygen Saturation": (0.99, "%"),
-                                  "Hemoglobin Concentration": (15, "g/dL"),
-                                  "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
-                                  "Oxygen Consumption of Lower Body": (50, "mL O2/min")}[param_name]
-            
+                baseline_value = {
+                                    "Heart Rate": (100, "beats/min"),
+                                    "Upper Body Resistance": (45, "Wood Units"),
+                                    "Lower Body Resistance": (35, "Wood Units"),
+                                    "Pulmonary Resistance": (10, "Wood Units"),
+                                    "Systemic Arterial Oxygen Saturation": (0.99, "%"),
+                                    "Hemoglobin Concentration": (15, "g/dL"),
+                                    "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
+                                    "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
+                                    # Added missing compliance parameters
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
+                                }[param_name]
                 
                 baseline_value, unit = baseline_value
 
@@ -133,7 +138,10 @@ def generate_plot():
         normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
 
         excluded_params = {
-            #"Hemoglobin Concentration"
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
         }
 
         # Iterate over each parameter's CO values and plot them
@@ -150,11 +158,11 @@ def generate_plot():
                                     "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
                                     "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
                                     # Added missing compliance parameters
-                                    "Compliance at Dia": (2 / 100, "mL/mmHg"),  
-                                    "Compliance at Sys": (0.01 / 100, "mL/mmHg"),
-                                    "Compliance of Systemic Artery": (1 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Vein": (30 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Artery": (2 / 135, "mL/mmHg")
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
@@ -174,7 +182,10 @@ def generate_plot():
         normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
 
         excluded_params = {
-            #"Hemoglobin Concentration"
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
         }
 
         # Iterate over each parameter's CO values and plot them
@@ -191,11 +202,11 @@ def generate_plot():
                                     "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
                                     "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
                                     # Added missing compliance parameters
-                                    "Compliance at Dia": (2 / 100, "mL/mmHg"),  
-                                    "Compliance at Sys": (0.01 / 100, "mL/mmHg"),
-                                    "Compliance of Systemic Artery": (1 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Vein": (30 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Artery": (2 / 135, "mL/mmHg")
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
@@ -215,7 +226,10 @@ def generate_plot():
         normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
 
         excluded_params = {
-            #"Hemoglobin Concentration"
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
         }
 
         # Iterate over each parameter's CO values and plot them
@@ -232,11 +246,11 @@ def generate_plot():
                                     "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
                                     "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
                                     # Added missing compliance parameters
-                                    "Compliance at Dia": (2 / 100, "mL/mmHg"),  
-                                    "Compliance at Sys": (0.01 / 100, "mL/mmHg"),
-                                    "Compliance of Systemic Artery": (1 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Vein": (30 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Artery": (2 / 135, "mL/mmHg")
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
@@ -256,7 +270,10 @@ def generate_plot():
         normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
 
         excluded_params = {
-            #"Hemoglobin Concentration"
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
         }
 
         # Iterate over each parameter's CO values and plot them
@@ -273,11 +290,11 @@ def generate_plot():
                                     "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
                                     "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
                                     # Added missing compliance parameters
-                                    "Compliance at Dia": (2 / 100, "mL/mmHg"),  
-                                    "Compliance at Sys": (0.01 / 100, "mL/mmHg"),
-                                    "Compliance of Systemic Artery": (1 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Vein": (30 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Artery": (2 / 135, "mL/mmHg")
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
@@ -314,11 +331,11 @@ def generate_plot():
                                     "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
                                     "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
                                     # Added missing compliance parameters
-                                    "Compliance at Dia": (2 / 100, "mL/mmHg"),  
-                                    "Compliance at Sys": (0.01 / 100, "mL/mmHg"),
-                                    "Compliance of Systemic Artery": (1 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Vein": (30 / 135, "mL/mmHg"),
-                                    "Compliance of Pulmonary Artery": (2 / 135, "mL/mmHg")
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
@@ -350,6 +367,9 @@ def generate_plot():
 ###
 
 ######
+from fontan_plots import complete_results
+import seaborn as sns
+from io import BytesIO
 @app.route('/generate_custom_plot')
 def generate_custom_plot():
     # Capture the query parameters from the frontend
@@ -357,34 +377,81 @@ def generate_custom_plot():
     input2 = request.args.get('input2')
     output = request.args.get('output')
 
-    # Generate a sample plot based on the selected parameters
-    # For demonstration, let's create a simple line plot based on the dropdowns
-    fig, ax = plt.subplots()
+    baseline_values = {
+        "HR": 100,    # Heart Rate (beats/min)
+        "UVR": 45,    # Upper Vascular Resistance (Wood Units)
+        "LVR": 35,    # Lower Vascular Resistance (Wood Units)
+        "PVR": 10,    # Pulmonary Vascular Resistance (Wood Units)
+        "S_sa": 0.99, # Systemic Artery Saturation (%)
+        "Hb": 15,     # Hemoglobin (g/dL)
+        "CVO2u": 70,  # Upper Body Oxygen Consumption (mL O2/min)
+        "CVO2l": 50,  # Lower Body Oxygen Consumption (mL O2/min)
+        "C_d": 2 / 100,  # Compliance at Diastole
+        "C_s": 0.01 / 100,  # Compliance at Systole
+        "C_sa": 1 / 135,  # Compliance of Systemic Artery/Total Blood Volume
+        "C_pv": 30 / 135, # Compliance of Pulmonary Vein/Total Blood Volume
+        "C_pa": 2 / 135   # Compliance of Pulmonary Artery/Total Blood Volume
+    }
 
-    # Example plot logic: using inputs to vary the plot, replace with your actual logic
-    x = [1, 2, 3, 4, 5]
-    if input1 == "HR":
-        y = [i * 2 for i in x]  # Sample logic based on input1 (Heart Rate)
-    elif input1 == "UVR":
-        y = [i * 3 for i in x]  # Sample logic based on input1 (Upper Vascular Resistance)
-    else:
-        y = [i * 4 for i in x]  # Default example for other inputs
+    # Initial guesses for solvers
+    z0_flows = [3.0, 1.5, 1.5, 3.0, 90, 5, 10]  # Initial guesses for fun_flows
+    z0_sat = [0.8, 0.7, 0.7, 0.7]  # Initial guesses for fun_sat
 
-    ax.plot(x, y, label=f'{input1} vs {input2}')
+    # Define value ranges for the two input parameters (±50% of baseline)
+    input1_values = np.linspace(baseline_values[input1] * 0.5, baseline_values[input1] * 1.5, 50)
+    input2_values = np.linspace(baseline_values[input2] * 0.5, baseline_values[input2] * 1.5, 50)
 
-    # Customize the plot with labels
-    ax.set_title(f"Plot: {input1} vs {input2}")
-    ax.set_xlabel(input1)
-    ax.set_ylabel(output)
+    # Create a grid for the heatmap
+    Z = np.zeros((len(input2_values), len(input1_values)))
 
-    # Convert the plot to PNG and encode it as Base64
+    for i, val1 in enumerate(input1_values):
+        for j, val2 in enumerate(input2_values):
+            # Set parameter values for this iteration, keeping others at baseline
+            params = baseline_values.copy()
+            params[input1] = val1
+            params[input2] = val2
+
+            # Solve for flows and oxygen saturation
+            try:
+                results = complete_results(
+                    params["UVR"], params["LVR"], params["PVR"], params["HR"],
+                    params["C_d"], params["C_s"], params["C_sa"], params["C_pv"], params["C_pa"],
+                    z0_flows, params["S_sa"], params["CVO2u"], params["CVO2l"], params["Hb"], z0_sat
+                )
+                
+                # Store the result in the grid
+                Z[j, i] = results[output]
+
+            except Exception as e:
+                Z[j, i] = np.nan  # If the solver fails, store NaN
+
+    # Plot the heatmap
+    plt.figure(figsize=(10, 7.5))
+    heatmap = sns.heatmap(Z, xticklabels=np.round(input1_values, 1), yticklabels=np.round(input2_values, 1),
+                cmap="coolwarm", cbar_kws={'label': output}, linewidths=0.5)
+    plt.xlabel(input1, fontsize=14)
+    plt.ylabel(input2, fontsize=14)
+    plt.title(f"Heatmap of {output}", fontsize = 18)
+
+    # Invert the direction of the y-axis
+    plt.gca().invert_yaxis()
+    #make ticks readably small
+    plt.tick_params(axis='both', which='major', labelsize=7)
+    # Customize the color bar labels font size
+    cbar = heatmap.collections[0].colorbar
+    cbar.ax.tick_params(labelsize=12)  # Adjust the size of the color bar labels
+    cbar.set_label(output, fontsize=14)  # Adjust font size of the color bar label
+
+    # Convert plot to PNG and encode as Base64
     img = io.BytesIO()
-    plt.savefig(img, format='png')
+    plt.savefig(img, format='png', bbox_inches='tight')
     img.seek(0)
     plot_base64 = base64.b64encode(img.getvalue()).decode('utf-8')
+    plt.close()
 
-    # Return the plot as a JSON response
-    return jsonify({'plot': plot_base64})
+    return jsonify({"plot": plot_base64})
+
+
 ######
 
 if __name__ == "__main__":

@@ -126,7 +126,12 @@ ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY
     <!-- Initialize the Resizer -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            imageMapResize(); // Resizes all image maps on the page
+
+        const image = document.getElementById('clickable-image');
+        image.style.width = '50%'; // reduce size
+        image.style.height = 'auto'; // Maintain aspect ratio
+
+        imageMapResize(); // Resizes all image maps on the page
         });
     </script>
 
@@ -196,19 +201,7 @@ ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY
     
     <p id="result"></p>
     
-    <!---------------------------------------------------------------
-    <select id="plotType">
-        <option value="CO">Cardiac Output</option>
-        <option value="Q_u">Blood Flow into the Upper Body</option>
-        <option value="Q_l">Blood Flow into the Lower Body</option>
-        <option value="Q_p">Blood Flow into the Lungs</option>
-        <option value="P_sa">Pressure of the Systemic Artery</option>
-        <option value="OER">Oxygen Extraction Ratio</option>
-    </select>
-    <button id="displayPlotButton">Display Plot</button>
-    <div id="plotContainer"></div>
-    -------------------------------------------------------------->
-    <!-------------------------------------------------------------->
+    <!--------------------------------------------------------------->
     <!-- First Plot Section -->
     <div class="plot-container">
         <div class="plot-section">
