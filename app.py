@@ -1,33 +1,41 @@
-###ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY TRIPLE HASHTAGS ###
-
-from flask import Flask, render_template, request, jsonify
+from flask import Flask, render_template, request, jsonify, send_from_directory
 from hlhs_model import fun_flows, fun_sat, C_d, C_s, C_sa, C_pv, C_pa
 import scipy.optimize
-
-###
 import fontan_plots
-from flask import send_from_directory
 import os
-import matplotlib
-matplotlib.use('Agg')
-import matplotlib.pyplot as plt
 import numpy as np
 import io
 import base64
-###
+import matplotlib
+matplotlib.use('Agg')
+import matplotlib.pyplot as plt
 
 app = Flask(__name__)
 
-###
 # Ensure you have a folder to save plots
-PLOTS_FOLDER = 'static/plots'
-os.makedirs(PLOTS_FOLDER, exist_ok=True)
-###
+#PLOTS_FOLDER = 'static/plots'
+#os.makedirs(PLOTS_FOLDER, exist_ok=True)
 
-# Render the main page
+# Render the pages
 @app.route("/")
 def index():
     return render_template("index.html")
+
+
+
+@app.route('/slider_page')
+def slider():
+    return render_template('slider_page.html')
+
+@app.route('/plot_page')
+def display_plot():
+    return render_template('plot_page.html')
+
+@app.route('/heatmap_page')
+def heatmap():
+    return render_template('heatmap_page.html')
+
+
 
 # Process the slider input
 @app.route("/process", methods=["POST"])
@@ -73,7 +81,6 @@ def process():
     })
 
 
-###
 from fontan_plots import plotCO, plotQU, plotQL, plotQP,plotPSA,plotOER
 COs=plotCO()
 QUs=plotQU()
@@ -364,9 +371,7 @@ def generate_plot():
 
     return jsonify({'plot': plot_data})
 
-###
 
-######
 from fontan_plots import complete_results
 import seaborn as sns
 from io import BytesIO
@@ -451,8 +456,6 @@ def generate_custom_plot():
 
     return jsonify({"plot": plot_base64})
 
-
-######
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

@@ -1,5 +1,3 @@
-/////ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY FIVE DASHES /////
-
 // Update displayed values dynamically
 function updateValue(displayId, value) {
     document.getElementById(displayId).innerText = value;
@@ -84,13 +82,13 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 });
 
-/////
 // Dropdown and Display Plot Button Functionality
 document.addEventListener('DOMContentLoaded', () => {
     const displayPlotButton = document.getElementById('displayPlotButton');
     const plotTypeSelect = document.getElementById('plotType');
     const plotContainer = document.getElementById('plotContainer');
 
+    
     displayPlotButton.addEventListener('click', async () => {
         const selectedPlot = plotTypeSelect.value;
 
@@ -135,4 +133,3 @@ document.addEventListener('DOMContentLoaded', () => {
     });
 
 });
-/////

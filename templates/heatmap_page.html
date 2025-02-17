@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Plot Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+
+</head>
+<body>
+    <h1>Heatmap Page</h1>
+    <p>This page will display the heatmaps.</p>
+
+
+    <!-- Second Plot Section (Below the First) -->
+    <div class="plot-container" id="secondPlotContainer">
+        <div class="dropdowns-container">
+            <!-- Input Dropdown 1 -->
+            <div class="dropdown-container">
+                <label for="inputDropdown1">Input 1:</label>
+                <select id="inputDropdown1">
+                    <option value="HR">Heart Rate</option>
+                    <option value="UVR">Upper Vascular Resistance</option>
+                    <option value="LVR">Lower Vascular Resistance</option>
+                    <option value="PVR">Pulmonary Vascular Resistance</option>
+                    <option value="S_sa">Systemic Artery Saturation</option>
+                    <option value="Hb">Hemoglobin</option>
+                    <option value="CVO2u">Upper Body Oxygen Consumption</option>
+                    <option value="CVO2l">Lower Body Oxygen Consumption</option>
+                </select>
+            </div>
+
+            <!-- Input Dropdown 2 -->
+            <div class="dropdown-container">
+                <label for="inputDropdown2">Input 2:</label>
+                <select id="inputDropdown2">
+                    <option value="HR">Heart Rate</option>
+                    <option value="UVR">Upper Vascular Resistance</option>
+                    <option value="LVR">Lower Vascular Resistance</option>
+                    <option value="PVR">Pulmonary Vascular Resistance</option>
+                    <option value="S_sa">Systemic Artery Saturation</option>
+                    <option value="Hb">Hemoglobin</option>
+                    <option value="CVO2u">Upper Body Oxygen Consumption</option>
+                    <option value="CVO2l">Lower Body Oxygen Consumption</option>
+                </select>
+            </div>
+
+            <!-- Output Dropdown -->
+            <div class="dropdown-container">
+                <label for="outputDropdown">Output:</label>
+                <select id="outputDropdown">
+                    <option value="Q_v">Cardiac Output</option>
+                    <option value="Q_u">Blood Flow into the Upper Body</option>
+                    <option value="Q_l">Blood Flow into the Lower Body</option>
+                    <option value="Q_p">Blood Flow into the Lungs</option>
+                    <option value="P_sa">Pressure of the Systemic Artery</option>
+                    <option value="OER">Oxygen Extraction Ratio</option>
+                </select>
+            </div>
+        </div>
+        <button id="generatePlotButton">Generate Plot</button>
+        <div id="customPlotContainer"></div> <!-- Second plot container -->
+    </div>
+
+
+
+    <a href="/"><button>Back to Home</button></a>
+
+
+
+    <script src="/static/heatmap_script.js"></script>
+</body>
+</html>

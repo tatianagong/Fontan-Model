@@ -3,61 +3,14 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Interactive Parameter Inputs</title>
-    <link rel="stylesheet" href="/static/styles.css">
-    <style>
-        /* Positioning the plot sections */
-        .plot-container {
-            display: flex;
-            flex-direction: column;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-        }
-
-        /* Second plot container styling (below second set of sliders) */
-        #secondPlotContainer {
-            margin-top: 30px;
-        }
-
-        /* Left side section */
-        .plot-section {
-            margin-bottom: 20px;
-        }
-
-        /* New plot functionality below the first plot */
-        .new-plot-section {
-            margin-top: 40px;
-        }
-
-        .dropdowns-container {
-            display: flex;
-            gap: 10px;
-        }
-
-        .dropdown-container {
-            display: flex;
-            flex-direction: column;
-        }
-
-        /* Ensure that the dropdowns and button are aligned */
-        #generatePlotButton {
-            margin-top: 10px;
-        }
-    </style>
+    <title>Slider Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
+    <h1>Slider Page</h1>
+    <p>This page will have the slider functionality for your model.</p>
 
-    <div class="home-content">
-        <h1>Welcome to the Fontan Circulation Model</h1>
-        <p>This project models blood flow in patients with a Fontan circulation...</p>
-    
-        <div class="button-container">
-            <a href="/slider_page"><button>Slider Page</button></a>
-            <a href="/plot_page"><button>Display Plot Page</button></a>
-            <a href="/heatmap_page"><button>Heatmap Page</button></a>
-        </div>
-    </div>
+
 
     <!-- Embedded Image -->
     <div class="image-container">
@@ -132,12 +85,15 @@
         document.addEventListener('DOMContentLoaded', () => {
 
         const image = document.getElementById('clickable-image');
-        image.style.width = '45%'; // reduce size
+        image.style.width = '50%'; // reduce size
         image.style.height = 'auto'; // Maintain aspect ratio
 
         imageMapResize(); // Resizes all image maps on the page
         });
     </script>
+
+
+
 
     <!-- Enables interactivity with the <area> elements in the map-->
     <script>
@@ -156,8 +112,6 @@
             <p id="modal-text"></p>
         </div>
     </div>    
-
-
 
 
 
@@ -211,80 +165,12 @@
     
     <p id="result"></p>
     
-    <!-- First Plot Section -->
-    <div class="plot-container">
-        <div class="plot-section">
-            <!-- Left side: Existing Plot Dropdown -->
-            <select id="plotType">
-                <option value="CO">Cardiac Output</option>
-                <option value="Q_u">Blood Flow into the Upper Body</option>
-                <option value="Q_l">Blood Flow into the Lower Body</option>
-                <option value="Q_p">Blood Flow into the Lungs</option>
-                <option value="P_sa">Pressure of the Systemic Artery</option>
-                <option value="OER">Oxygen Extraction Ratio</option>
-            </select>
-            <button id="displayPlotButton">Display Plot</button>
-        </div>
-        <div id="plotContainer"></div> <!-- Where the plot will be displayed -->
-    </div>
-
-    <!-- Second Plot Section (Below the First) -->
-    <div class="plot-container" id="secondPlotContainer">
-        <div class="dropdowns-container">
-            <!-- Input Dropdown 1 -->
-            <div class="dropdown-container">
-                <label for="inputDropdown1">Input 1:</label>
-                <select id="inputDropdown1">
-                    <option value="HR">Heart Rate</option>
-                    <option value="UVR">Upper Vascular Resistance</option>
-                    <option value="LVR">Lower Vascular Resistance</option>
-                    <option value="PVR">Pulmonary Vascular Resistance</option>
-                    <option value="S_sa">Systemic Artery Saturation</option>
-                    <option value="Hb">Hemoglobin</option>
-                    <option value="CVO2u">Upper Body Oxygen Consumption</option>
-                    <option value="CVO2l">Lower Body Oxygen Consumption</option>
-                </select>
-            </div>
-
-            <!-- Input Dropdown 2 -->
-            <div class="dropdown-container">
-                <label for="inputDropdown2">Input 2:</label>
-                <select id="inputDropdown2">
-                    <option value="HR">Heart Rate</option>
-                    <option value="UVR">Upper Vascular Resistance</option>
-                    <option value="LVR">Lower Vascular Resistance</option>
-                    <option value="PVR">Pulmonary Vascular Resistance</option>
-                    <option value="S_sa">Systemic Artery Saturation</option>
-                    <option value="Hb">Hemoglobin</option>
-                    <option value="CVO2u">Upper Body Oxygen Consumption</option>
-                    <option value="CVO2l">Lower Body Oxygen Consumption</option>
-                </select>
-            </div>
-
-            <!-- Output Dropdown -->
-            <div class="dropdown-container">
-                <label for="outputDropdown">Output:</label>
-                <select id="outputDropdown">
-                    <option value="Q_v">Cardiac Output</option>
-                    <option value="Q_u">Blood Flow into the Upper Body</option>
-                    <option value="Q_l">Blood Flow into the Lower Body</option>
-                    <option value="Q_p">Blood Flow into the Lungs</option>
-                    <option value="P_sa">Pressure of the Systemic Artery</option>
-                    <option value="OER">Oxygen Extraction Ratio</option>
-                </select>
-            </div>
-        </div>
-        <button id="generatePlotButton">Generate Plot</button>
-        <div id="customPlotContainer"></div> <!-- Second plot container -->
-    </div>
-    
 
 
 
-
-
-
+    <a href="/"><button>Back to Home</button></a>
 
     <script src="/static/script.js"></script>
+
 </body>
 </html>

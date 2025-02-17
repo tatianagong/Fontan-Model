@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Display Plot Page</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+
+
+</head>
+<body>
+    <h1>Display Plot Page</h1>
+    <p>This page will display plots generated from your Fontan circulation model.</p>
+
+
+
+    <!-- First Plot Section -->
+    <div class="plot-container">
+        <div class="plot-section">
+            <!-- Left side: Existing Plot Dropdown -->
+            <select id="plotType">
+                <option value="CO">Cardiac Output</option>
+                <option value="Q_u">Blood Flow into the Upper Body</option>
+                <option value="Q_l">Blood Flow into the Lower Body</option>
+                <option value="Q_p">Blood Flow into the Lungs</option>
+                <option value="P_sa">Pressure of the Systemic Artery</option>
+                <option value="OER">Oxygen Extraction Ratio</option>
+            </select>
+            <button id="displayPlotButton">Display Plot</button>
+        </div>
+        <div id="plotContainer"></div> <!-- Where the plot will be displayed -->
+    </div>
+
+
+
+    <a href="/"><button>Back to Home</button></a>
+
+
+
+    <script src="/static/plot_script.js"></script>
+</body>
+</html>

@@ -1,5 +1,3 @@
-###ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY TRIPLE HASHTAGS ###
-
 # Get Dependencies
 import pandas as pd
 import numpy as np
@@ -7,13 +5,8 @@ import math as math
 import seaborn as sns
 import matplotlib.pyplot as plt   
 import scipy.optimize
-
-###
 import os
-# Ensure you have a folder to save plots
-PLOTS_FOLDER = 'static/plots'
-os.makedirs(PLOTS_FOLDER, exist_ok=True)
-###
+
 
 def fun_flows(variables, *param):
 
@@ -379,6 +372,3 @@ def plotOER(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_
         
         OERs[param_name] = OER_outputs  # Store results in the dictionary
     return OERs
-
-
-###
