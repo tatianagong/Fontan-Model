@@ -21,8 +21,6 @@ app = Flask(__name__)
 def index():
     return render_template("index.html")
 
-
-
 @app.route('/slider_page')
 def slider():
     return render_template('slider_page.html')
@@ -35,7 +33,9 @@ def display_plot():
 def heatmap():
     return render_template('heatmap_page.html')
 
-
+@app.route('/conditions_page')
+def conditions_page():
+    return render_template('conditions_page.html')
 
 # Process the slider input
 @app.route("/process", methods=["POST"])

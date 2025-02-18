@@ -3,12 +3,12 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Slider Page</title>
+    <title>New Page</title>
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body>
-    <h1>Slider Page</h1>
-    <p>This page will have the slider functionality for your model.</p>
+    <h1>Preset Conditions</h1>
+    <p>Click each button to simulate the most common conditions in patients with Fontan Circulation.</p>
 
     <!-- Embedded Image -->
     <div class="image-container">
@@ -90,9 +90,6 @@
         });
     </script>
 
-
-
-
     <!-- Enables interactivity with the <area> elements in the map-->
     <script>
         // Example of an interaction when clicking an area
@@ -111,8 +108,15 @@
         </div>
     </div>    
 
+    <!--Buttons for Preset Conditions-->
+    <div class="button-container">
+        <button onclick="setVitals('lowPreload')">Low Preload</button>
+        <button onclick="setVitals('lungProblem')">Lung Problem</button>
+        <button onclick="setVitals('heartFailure')">Heart Failure</button>
+    </div>
+
     <!-- Sliders -->
-    <h1>Manually Input Patient Vitals</h1>
+    <h1>Patient Vitals</h1>
     <form id="parameterForm">
         <!--Heart Rate Slider-->
         <label for="HR">Heart Rate (beats/min):</label>
@@ -163,5 +167,59 @@
 
     <script src="/static/script.js"></script>
 
+    <!-- sets conditions-->
+    <script>
+        function setVitals(condition) {
+            const vitals = {
+                // all pressures should be low, including fontan and common atrium
+                // FONTAN PRESSURE = PULMONARY ARTERY PRESSURE
+                // CA PRESSURE = PULMONARY VEIN PRESSURE
+                // translate low volume into the last pressure equation
+                lowPreload: {
+                    HR: 100,
+                    UVR: 40,
+                    LVR: 30,
+                    PVR: 8,
+                    S_sa: 0.98,
+                    Hb: 14,
+                    CVO2u: 60,
+                    CVO2l: 45
+                },
+                // fontan pressure is high
+                // common atrium pressure is low
+                // PVR can double, DONE
+                lungProblem: {
+                    HR: 100,
+                    UVR: 50,
+                    LVR: 35,
+                    PVR: 20,
+                    S_sa: 0.98,
+                    Hb: 13,
+                    CVO2u: 70,
+                    CVO2l: 50
+                },
+                // all pressures will be high
+                // raise systolic compliance for the heart
+                heartFailure: {
+                    HR: 100,
+                    UVR: 35,
+                    LVR: 40,
+                    PVR: 12,
+                    S_sa: 0.98,
+                    Hb: 12,
+                    CVO2u: 80,
+                    CVO2l: 55
+                }
+            };
+    
+            const selectedVitals = vitals[condition];
+    
+            // Update each slider and display the value
+            for (const key in selectedVitals) {
+                document.getElementById(key).value = selectedVitals[key];
+                document.getElementById(key + "Value").innerText = selectedVitals[key];
+            }
+        }
+    </script>    
 </body>
 </html>
