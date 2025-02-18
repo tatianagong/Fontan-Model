@@ -1,5 +1,3 @@
-###ADDITIONS TO FILE IN THE INTEREST OF ADDING PLOTS TO THE WEBPAGE ARE ENCLOSED BY TRIPLE HASHTAGS ###
-
 # Get Dependencies
 import pandas as pd
 import numpy as np
@@ -7,13 +5,8 @@ import math as math
 import seaborn as sns
 import matplotlib.pyplot as plt   
 import scipy.optimize
-
-###
 import os
-# Ensure you have a folder to save plots
-PLOTS_FOLDER = 'static/plots'
-os.makedirs(PLOTS_FOLDER, exist_ok=True)
-###
+
 
 def fun_flows(variables, *param):
 
@@ -82,9 +75,9 @@ def plotCO(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
         "Heart Rate": HR,
         "Compliance at Dia": C_d,
         "Compliance at Sys": C_s,
-        "Compliance of Systemic Artery": C_sa,
-        "Compliance of Pulmonary Vein": C_pv,
-        "Compliance of Pulmonary Artery": C_pa,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
         "Oxygen Consumption of Upper Body": CVO2u,
         "Oxygen Consumption of Lower Body": CVO2l,
         "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
@@ -112,7 +105,7 @@ def plotCO(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
                 results = complete_results(
                     updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
                     updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
-                    updated_params["Compliance of Systemic Artery"], updated_params["Compliance of Pulmonary Vein"], updated_params["Compliance of Pulmonary Artery"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
                     z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
                 )
                 #Q_p = results[3]  # Cardiac output
@@ -134,9 +127,9 @@ def plotQU(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
         "Heart Rate": HR,
         "Compliance at Dia": C_d,
         "Compliance at Sys": C_s,
-        "Compliance of Systemic Artery": C_sa,
-        "Compliance of Pulmonary Vein": C_pv,
-        "Compliance of Pulmonary Artery": C_pa,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
         "Oxygen Consumption of Upper Body": CVO2u,
         "Oxygen Consumption of Lower Body": CVO2l,
         "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
@@ -164,7 +157,7 @@ def plotQU(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
                 results = complete_results(
                     updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
                     updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
-                    updated_params["Compliance of Systemic Artery"], updated_params["Compliance of Pulmonary Vein"], updated_params["Compliance of Pulmonary Artery"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
                     z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
                 )
                 Q_u = results.get("Q_u", float('nan'))
@@ -185,9 +178,9 @@ def plotQL(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
         "Heart Rate": HR,
         "Compliance at Dia": C_d,
         "Compliance at Sys": C_s,
-        "Compliance of Systemic Artery": C_sa,
-        "Compliance of Pulmonary Vein": C_pv,
-        "Compliance of Pulmonary Artery": C_pa,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
         "Oxygen Consumption of Upper Body": CVO2u,
         "Oxygen Consumption of Lower Body": CVO2l,
         "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
@@ -215,7 +208,7 @@ def plotQL(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
                 results = complete_results(
                     updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
                     updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
-                    updated_params["Compliance of Systemic Artery"], updated_params["Compliance of Pulmonary Vein"], updated_params["Compliance of Pulmonary Artery"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
                     z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
                 )
                 Q_l = results.get("Q_l", float('nan'))
@@ -236,9 +229,9 @@ def plotQP(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
         "Heart Rate": HR,
         "Compliance at Dia": C_d,
         "Compliance at Sys": C_s,
-        "Compliance of Systemic Artery": C_sa,
-        "Compliance of Pulmonary Vein": C_pv,
-        "Compliance of Pulmonary Artery": C_pa,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
         "Oxygen Consumption of Upper Body": CVO2u,
         "Oxygen Consumption of Lower Body": CVO2l,
         "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
@@ -266,7 +259,7 @@ def plotQP(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_p
                 results = complete_results(
                     updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
                     updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
-                    updated_params["Compliance of Systemic Artery"], updated_params["Compliance of Pulmonary Vein"], updated_params["Compliance of Pulmonary Artery"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
                     z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
                 )
                 Q_p = results.get("Q_p", float('nan'))
@@ -287,9 +280,9 @@ def plotPSA(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_
         "Heart Rate": HR,
         "Compliance at Dia": C_d,
         "Compliance at Sys": C_s,
-        "Compliance of Systemic Artery": C_sa,
-        "Compliance of Pulmonary Vein": C_pv,
-        "Compliance of Pulmonary Artery": C_pa,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
         "Oxygen Consumption of Upper Body": CVO2u,
         "Oxygen Consumption of Lower Body": CVO2l,
         "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
@@ -317,7 +310,7 @@ def plotPSA(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_
                 results = complete_results(
                     updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
                     updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
-                    updated_params["Compliance of Systemic Artery"], updated_params["Compliance of Pulmonary Vein"], updated_params["Compliance of Pulmonary Artery"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
                     z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
                 )
                 P_sa = results.get("P_sa", float('nan'))
@@ -338,9 +331,9 @@ def plotOER(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_
         "Heart Rate": HR,
         "Compliance at Dia": C_d,
         "Compliance at Sys": C_s,
-        "Compliance of Systemic Artery": C_sa,
-        "Compliance of Pulmonary Vein": C_pv,
-        "Compliance of Pulmonary Artery": C_pa,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
         "Oxygen Consumption of Upper Body": CVO2u,
         "Oxygen Consumption of Lower Body": CVO2l,
         "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
@@ -368,7 +361,7 @@ def plotOER(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_
                 results = complete_results(
                     updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
                     updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
-                    updated_params["Compliance of Systemic Artery"], updated_params["Compliance of Pulmonary Vein"], updated_params["Compliance of Pulmonary Artery"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
                     z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
                 )
                 OER = results.get("OER", float('nan'))
@@ -379,6 +372,3 @@ def plotOER(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_
         
         OERs[param_name] = OER_outputs  # Store results in the dictionary
     return OERs
-
-
-###
