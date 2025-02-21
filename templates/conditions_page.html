@@ -73,6 +73,15 @@
             <area target="" alt="Right Pulmonary Vein" title="Right Pulmonary Vein" href="" coords="526,513,512,529,536,528,536,516" shape="poly"
             data-content="Right Pulmonary Vein: Delivers oxygenated blood from the right lung back to the heart.">
         </map>
+
+        <!-- Confirmation Modal -->
+        <div id="confirmation-modal" class="modal" style="display: none;">
+            <div class="modal-content">
+                <span id="modal-close" class="close">&times;</span>
+                <p id="modal-text">Preset applied successfully!</p>
+            </div>
+</div>
+
     </div>
 
     <!-- Install ImageMapResizer -->
@@ -110,9 +119,9 @@
 
     <!--Buttons for Preset Conditions-->
     <div class="button-container">
-        <button onclick="setVitals('lowPreload')">Low Preload</button>
-        <button onclick="setVitals('lungProblem')">Lung Problem</button>
-        <button onclick="setVitals('heartFailure')">Heart Failure</button>
+        <button onclick="setVitalsAndApply('lowPreload')">Low Preload</button>
+        <button onclick="setVitalsAndApply('lungProblem')">Lung Problem</button>
+        <button onclick="setVitalsAndApply('heartFailure')">Heart Failure</button>
     </div>
 
     <!-- Sliders -->
@@ -169,57 +178,121 @@
 
     <!-- sets conditions-->
     <script>
+        function setVitalsAndApply(condition) {
+            setVitals(condition); // update sliders immediately
+            applyPreset(condition); // send request to Flask backend
+            showConfirmationModal(condition);
+        }
+
         function setVitals(condition) {
             const vitals = {
                 // all pressures should be low, including fontan and common atrium
                 // FONTAN PRESSURE = PULMONARY ARTERY PRESSURE
                 // CA PRESSURE = PULMONARY VEIN PRESSURE
-                // translate low volume into the last pressure equation
+                // translate low volume into the last pressure equation, whcih should lower the pressures, (x10/9 for all compliances), but should i do so for C_s and C_d
                 lowPreload: {
                     HR: 100,
-                    UVR: 40,
-                    LVR: 30,
-                    PVR: 8,
-                    S_sa: 0.98,
-                    Hb: 14,
-                    CVO2u: 60,
-                    CVO2l: 45
+                    UVR: 45,
+                    LVR: 35,
+                    PVR: 10,
+                    S_sa: 0.99,
+                    Hb: 15,
+                    CVO2u: 70,
+                    CVO2l: 50
                 },
                 // fontan pressure is high
                 // common atrium pressure is low
                 // PVR can double, DONE
                 lungProblem: {
                     HR: 100,
-                    UVR: 50,
+                    UVR: 45,
                     LVR: 35,
                     PVR: 20,
-                    S_sa: 0.98,
-                    Hb: 13,
+                    S_sa: 0.99,
+                    Hb: 15,
                     CVO2u: 70,
                     CVO2l: 50
                 },
-                // all pressures will be high
+                // all pressures will be high - lower all compliances except C_s (x0.9, x(10/9)
                 // raise systolic compliance for the heart
                 heartFailure: {
                     HR: 100,
-                    UVR: 35,
-                    LVR: 40,
-                    PVR: 12,
-                    S_sa: 0.98,
-                    Hb: 12,
-                    CVO2u: 80,
-                    CVO2l: 55
+                    UVR: 45,
+                    LVR: 35,
+                    PVR: 10,
+                    S_sa: 0.99,
+                    Hb: 15,
+                    CVO2u: 70,
+                    CVO2l: 50
                 }
             };
     
             const selectedVitals = vitals[condition];
     
-            // Update each slider and display the value
+            // Update each slider and display the value immediately (frontend)
             for (const key in selectedVitals) {
-                document.getElementById(key).value = selectedVitals[key];
-                document.getElementById(key + "Value").innerText = selectedVitals[key];
+                if (document.getElementById(key)) {
+                    document.getElementById(key).value = selectedVitals[key];
+                    document.getElementById(key + "Value").innerText = selectedVitals[key];
+                }
             }
         }
+
+        function applyPreset(condition) {
+            fetch(`/apply_preset?condition=${condition}`)
+            .then(response => response.json())
+            .then(data => {
+                // updates sliders again with backend confirmed values
+                for (const key in data) {
+                    if (document.getElementById(key)) {
+                        document.getElementById(key).value = data[key];
+                        document.getElementById(key + "Value").innerText = data[key];
+                    }
+                }
+                console.log("updated from backend:", data)
+                console.log(`Compliance values for ${condition}:`, {
+                    C_d: data.C_d,
+                    C_s: data.C_s,
+                    C_sa: data.C_sa,
+                    C_pv: data.C_pv,
+                    C_pa: data.C_pa
+                });
+                showConfirmationModal(condition);
+            })
+            .catch(error => console.error("Error applying preset:", error));
+        }
+
+    
+        <!-- shows confirmation messages after preset conditions are clicked-->
+
+        function showConfirmationModal(condition) {
+            const modal = document.getElementById("confirmation-modal");
+            const modalText = document.getElementById("modal-text");
+    
+            // Custom message based on selected preset
+            const messages = {
+                "lowPreload": "Low Preload preset applied! Compliance values updated.",
+                "lungProblem": "Lung Problem preset applied! No compliance changes were needed.",
+                "heartFailure": "Heart Failure preset applied! Heart rate and compliance updated."
+            };
+    
+            // Set dynamic modal text
+            modalText.innerText = messages[condition] || "Preset applied successfully!";
+            
+            // Display the modal
+            modal.style.display = "block";
+    
+            // Close modal when clicking '×' or outside the modal
+            document.getElementById("modal-close").onclick = function () {
+                modal.style.display = "none";
+            };
+            window.onclick = function (event) {
+                if (event.target === modal) {
+                    modal.style.display = "none";
+                }
+            };
+        }
     </script>    
+
 </body>
 </html>

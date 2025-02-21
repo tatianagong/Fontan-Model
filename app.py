@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, jsonify, send_from_directory
-from hlhs_model import fun_flows, fun_sat, C_d, C_s, C_sa, C_pv, C_pa
+from hlhs_model import fun_flows, fun_sat, update_compliance, C_d, C_s, C_sa, C_pv, C_pa
 import scipy.optimize
 import fontan_plots
 import os
@@ -456,6 +456,78 @@ def generate_custom_plot():
 
     return jsonify({"plot": plot_base64})
 
+@app.route('/apply_preset')
+def apply_preset():
+    condition = request.args.get("condition")
+
+    presets = {
+        "lowPreload": {
+            "HR": 110, "UVR": 45, "LVR": 35, "PVR": 10, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
+            "C_d": 1/45, "C_s": 1/9000, "C_sa": 2/243, "C_pv": 20/81, "C_pa": 4/243  
+        },
+        "lungProblem": {
+            # no compliance changes
+            "HR": 110, "UVR": 45, "LVR": 35, "PVR": 20, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
+        },
+        "heartFailure": {
+            "HR": 110, "UVR": 45, "LVR": 35, "PVR": 10, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
+            "C_d": 0.018, "C_s": 1/9000, "C_sa": 1/150, "C_pv": 1/5, "C_pa": 1/75  
+        } 
+    }
+
+    if condition in presets:
+        preset_values = presets[condition]
+
+        # updates compliances only if they exist in the preset
+        if "C_d" in preset_values:
+            update_compliance(
+                preset_values["C_d"],
+                preset_values["C_s"],
+                preset_values["C_sa"],
+                preset_values["C_pv"],
+                preset_values["C_pa"]
+            )
+    
+        # Solve for new vitals using updated values
+        param_flows = (
+            preset_values["UVR"], preset_values["LVR"], preset_values["PVR"],
+            preset_values["HR"], C_d, C_s, C_sa, C_pv, C_pa
+        )
+        z0_flows = (3.1, 1.5, 1.5, 3.2, 75, 26, 2)
+
+        result_flows = scipy.optimize.fsolve(fun_flows, z0_flows, args=param_flows, full_output=True, xtol=1e-4)
+        (Q_v, Q_u, Q_l, Q_p, P_sa, P_pa, P_pv) = result_flows[0]
+
+        param_sat = (Q_p, Q_u, Q_l, preset_values["S_sa"], preset_values["CVO2u"], preset_values["CVO2l"], preset_values["Hb"])
+        z0_sat = (0.55, 0.99, 0.55, 0.55)
+
+        result_O2_sat = scipy.optimize.fsolve(fun_sat, z0_sat, args=param_sat, full_output=True, xtol=1e-4)
+        (S_pa, S_pv, S_svu, S_svl) = result_O2_sat[0]
+
+        OER = (Q_u * (preset_values["S_sa"] - S_svu) + Q_l * (preset_values["S_sa"] - S_svl)) / ((Q_u + Q_l) * preset_values["S_sa"])
+
+        # Remove backend-only compliance parameters before sending response
+        frontend_values = {key: value for key, value in preset_values.items() if not key.startswith("C_")}
+
+        # Add computed vitals to response
+        frontend_values.update({
+            "Q_v": round(Q_v, 2),
+            "Q_u": round(Q_u, 2),
+            "Q_l": round(Q_l, 2),
+            "Q_p": round(Q_p, 2),
+            "P_sa": round(P_sa, 2),
+            "P_pa": round(P_pa, 2),
+            "P_pv": round(P_pv, 2),
+            "S_pa": round(S_pa, 2),
+            "S_pv": round(S_pv, 2),
+            "S_svu": round(S_svu, 2),
+            "S_svl": round(S_svl, 2),
+            "OER": round(OER, 2),
+        })
+
+        return jsonify(frontend_values)
+
+    return jsonify({"error": "Invalid condition"}), 400
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)
