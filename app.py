@@ -40,6 +40,7 @@ def conditions_page():
 # Process the slider input
 @app.route("/process", methods=["POST"])
 def process():
+
     data = request.json
     HR = float(data.get("HR"))  # Slider value, e.g., heart rate
     UVR = float(data.get("UVR"))
@@ -64,6 +65,9 @@ def process():
 
     OER = (Q_u * (S_sa - S_svu) + Q_l * (S_sa - S_svl))/ ((Q_u + Q_l) * S_sa)
 
+    print(f"/PROCESS new output Q_v={Q_v}, Q_u={Q_u}, P_sa={P_sa}, P_pv={P_pv}")
+
+
     return jsonify({
         "Q_v": round(Q_v, 2),
         "Q_u": round(Q_u, 2),
@@ -79,7 +83,6 @@ def process():
         "S_svl": round(S_svl,2),
         "OER": round(OER, 2),
     })
-
 
 from fontan_plots import plotCO, plotQU, plotQL, plotQP,plotPSA,plotOER
 COs=plotCO()
@@ -456,21 +459,31 @@ def generate_custom_plot():
 
     return jsonify({"plot": plot_base64})
 
+updated_compliance_values = {
+    "C_d": C_d,
+    "C_s": C_s,
+    "C_sa": C_sa,
+    "C_pv": C_pv,
+    "C_pa": C_pa
+    }
+
 @app.route('/apply_preset')
 def apply_preset():
+    global updated_compliance_values
     condition = request.args.get("condition")
 
     presets = {
         "lowPreload": {
-            "HR": 110, "UVR": 45, "LVR": 35, "PVR": 10, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
+            "HR": 100, "UVR": 45, "LVR": 35, "PVR": 10, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
             "C_d": 1/45, "C_s": 1/9000, "C_sa": 2/243, "C_pv": 20/81, "C_pa": 4/243  
         },
         "lungProblem": {
             # no compliance changes
-            "HR": 110, "UVR": 45, "LVR": 35, "PVR": 20, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
+            "HR": 100, "UVR": 45, "LVR": 35, "PVR": 20, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
+            "C_d": 2/100, "C_s": 0.01/100, "C_sa": 1/135, "C_pv": 30/135, "C_pa": 2/135
         },
         "heartFailure": {
-            "HR": 110, "UVR": 45, "LVR": 35, "PVR": 10, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
+            "HR": 100, "UVR": 45, "LVR": 35, "PVR": 10, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
             "C_d": 0.018, "C_s": 1/9000, "C_sa": 1/150, "C_pv": 1/5, "C_pa": 1/75  
         } 
     }
@@ -479,55 +492,85 @@ def apply_preset():
         preset_values = presets[condition]
 
         # updates compliances only if they exist in the preset
-        if "C_d" in preset_values:
-            update_compliance(
-                preset_values["C_d"],
-                preset_values["C_s"],
-                preset_values["C_sa"],
-                preset_values["C_pv"],
-                preset_values["C_pa"]
-            )
-    
-        # Solve for new vitals using updated values
-        param_flows = (
-            preset_values["UVR"], preset_values["LVR"], preset_values["PVR"],
-            preset_values["HR"], C_d, C_s, C_sa, C_pv, C_pa
-        )
-        z0_flows = (3.1, 1.5, 1.5, 3.2, 75, 26, 2)
-
-        result_flows = scipy.optimize.fsolve(fun_flows, z0_flows, args=param_flows, full_output=True, xtol=1e-4)
-        (Q_v, Q_u, Q_l, Q_p, P_sa, P_pa, P_pv) = result_flows[0]
-
-        param_sat = (Q_p, Q_u, Q_l, preset_values["S_sa"], preset_values["CVO2u"], preset_values["CVO2l"], preset_values["Hb"])
-        z0_sat = (0.55, 0.99, 0.55, 0.55)
-
-        result_O2_sat = scipy.optimize.fsolve(fun_sat, z0_sat, args=param_sat, full_output=True, xtol=1e-4)
-        (S_pa, S_pv, S_svu, S_svl) = result_O2_sat[0]
-
-        OER = (Q_u * (preset_values["S_sa"] - S_svu) + Q_l * (preset_values["S_sa"] - S_svl)) / ((Q_u + Q_l) * preset_values["S_sa"])
-
-        # Remove backend-only compliance parameters before sending response
-        frontend_values = {key: value for key, value in preset_values.items() if not key.startswith("C_")}
-
-        # Add computed vitals to response
-        frontend_values.update({
-            "Q_v": round(Q_v, 2),
-            "Q_u": round(Q_u, 2),
-            "Q_l": round(Q_l, 2),
-            "Q_p": round(Q_p, 2),
-            "P_sa": round(P_sa, 2),
-            "P_pa": round(P_pa, 2),
-            "P_pv": round(P_pv, 2),
-            "S_pa": round(S_pa, 2),
-            "S_pv": round(S_pv, 2),
-            "S_svu": round(S_svu, 2),
-            "S_svl": round(S_svl, 2),
-            "OER": round(OER, 2),
+        updated_compliance_values.update({
+            "C_d": preset_values["C_d"],
+            "C_s": preset_values["C_s"],
+            "C_sa": preset_values["C_sa"],
+            "C_pv": preset_values["C_pv"],
+            "C_pa": preset_values["C_pa"]
         })
 
-        return jsonify(frontend_values)
+        print(f"/PRESET Updated compliance values for {condition}: {updated_compliance_values}")
 
+        return jsonify({"message": f"Preset {condition} applied!", "compliance_values": updated_compliance_values})
     return jsonify({"error": "Invalid condition"}), 400
+
+@app.route("/calculate_condition_values", methods=["POST"])
+def calculate_condition_values():
+    global updated_compliance_values  # Ensure the latest values are used
+    print(f"/CALCULATE compliance values: {updated_compliance_values}")
+
+    data = request.json # get slider values
+    if not data:
+        return jsonify({"error": "No slider values receive."}), 400
+       
+    # Extract slider values from frontend
+    HR = float(data.get("HR"))
+    UVR = float(data.get("UVR"))
+    LVR = float(data.get("LVR"))
+    PVR = float(data.get("PVR"))
+    S_sa = float(data.get("S_sa"))
+    Hb = float(data.get("Hb"))
+    CVO2u = float(data.get("CVO2u"))
+    CVO2l = float(data.get("CVO2l"))
+
+    # Use the latest compliance values
+    C_d = updated_compliance_values["C_d"]
+    C_s = updated_compliance_values["C_s"]
+    C_sa = updated_compliance_values["C_sa"]
+    C_pv = updated_compliance_values["C_pv"]
+    C_pa = updated_compliance_values["C_pa"]
+
+    print(f"C_d: {C_d}, C_s: {C_s}, C_sa: {C_sa}, C_pv: {C_pv}, C_pa: {C_pa}")
+
+    # Solve for new vitals
+    param_flows = (UVR, LVR, PVR, HR, C_d, C_s, C_sa, C_pv, C_pa)
+    z0_flows = (3.1, 1.5, 1.5, 3.2, 75, 26, 2)
+
+    result_flows = scipy.optimize.fsolve(fun_flows, z0_flows, args=param_flows, full_output=True, xtol=1e-4)
+    (Q_v, Q_u, Q_l, Q_p, P_sa, P_pa, P_pv) = result_flows[0]
+
+    param_sat = (Q_p, Q_u, Q_l, S_sa, CVO2u, CVO2l, Hb)
+    z0_sat = (0.55, 0.99, 0.55, 0.55)
+
+    result_O2_sat = scipy.optimize.fsolve(fun_sat, z0_sat, args=param_sat, full_output=True, xtol=1e-4)
+    (S_pa, S_pv, S_svu, S_svl) = result_O2_sat[0]
+
+    OER = (Q_u * (S_sa - S_svu) + Q_l * (S_sa - S_svl)) / ((Q_u + Q_l) * S_sa)
+
+    # Send back computed values
+    computed_values = {
+        "Q_v": round(Q_v, 2),
+        "Q_u": round(Q_u, 2),
+        "Q_l": round(Q_l, 2),
+        "Q_p": round(Q_p, 2),
+        "P_sa": round(P_sa, 2),
+        "P_pa": round(P_pa, 2),
+        "P_pv": round(P_pv, 2),
+        "S_pa": round(S_pa, 2),
+        "S_pv": round(S_pv, 2),
+        "S_svu": round(S_svu, 2),
+        "S_svl": round(S_svl, 2),
+        "OER": round(OER, 2),
+        "C_d": C_d,
+        "C_s": C_s,
+        "C_sa": C_sa,
+        "C_pv": C_pv,
+        "C_pa": C_pa
+    }
+
+    print(f"Computed values sent: {computed_values}")
+    return jsonify(computed_values)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0", port=5001, debug=True)

@@ -80,7 +80,7 @@
                 <span id="modal-close" class="close">&times;</span>
                 <p id="modal-text">Preset applied successfully!</p>
             </div>
-</div>
+        </div>
 
     </div>
 
@@ -166,14 +166,15 @@
         <label for="CVO2l">Oxygen Consumption of the Lower Body (mL O2/min):</label>
         <input type="range" id="CVO2l" name="CVO2l" min="25" max="75" step="1" value="50" oninput="updateValue('CVO2lValue', this.value)">
         <span id="CVO2lValue">50</span><br><br>
-
-        <button type="submit">Submit</button>
     </form>
-    
     <p id="result"></p>
-
     <a href="/"><button>Back to Home</button></a>
 
+    <!-- Submit button now calls submitConditionForm() instead of /process-->
+    <button type="button" id="conditionSubmitBtn">Submit</button>
+    <div id="conditionResults"></div>
+
+    <!-- EXTERNAL SCRIPTS -->
     <script src="/static/script.js"></script>
 
     <!-- sets conditions-->
@@ -189,7 +190,7 @@
                 // all pressures should be low, including fontan and common atrium
                 // FONTAN PRESSURE = PULMONARY ARTERY PRESSURE
                 // CA PRESSURE = PULMONARY VEIN PRESSURE
-                // translate low volume into the last pressure equation, whcih should lower the pressures, (x10/9 for all compliances), but should i do so for C_s and C_d
+                // translate low volume into the last pressure equation, whcih should lower the pressures, (x10/9 for all compliances), but should i do so for C_s and C_d (no)
                 lowPreload: {
                     HR: 100,
                     UVR: 45,
@@ -214,7 +215,8 @@
                     CVO2l: 50
                 },
                 // all pressures will be high - lower all compliances except C_s (x0.9, x(10/9)
-                // raise systolic compliance for the heart
+                // SHOULD SEE SMALLER CARDIAC OUTPUT - systolic and diastolic heart failure, keep other compliances the same
+                // raise systolic compliance for the heart or decrease diastolic
                 heartFailure: {
                     HR: 100,
                     UVR: 45,
@@ -242,6 +244,8 @@
             fetch(`/apply_preset?condition=${condition}`)
             .then(response => response.json())
             .then(data => {
+                console.log("Backend Response:", data);
+
                 // updates sliders again with backend confirmed values
                 for (const key in data) {
                     if (document.getElementById(key)) {
@@ -250,49 +254,10 @@
                     }
                 }
                 console.log("updated from backend:", data)
-                console.log(`Compliance values for ${condition}:`, {
-                    C_d: data.C_d,
-                    C_s: data.C_s,
-                    C_sa: data.C_sa,
-                    C_pv: data.C_pv,
-                    C_pa: data.C_pa
-                });
                 showConfirmationModal(condition);
             })
             .catch(error => console.error("Error applying preset:", error));
         }
-
-    
-        <!-- shows confirmation messages after preset conditions are clicked-->
-
-        function showConfirmationModal(condition) {
-            const modal = document.getElementById("confirmation-modal");
-            const modalText = document.getElementById("modal-text");
-    
-            // Custom message based on selected preset
-            const messages = {
-                "lowPreload": "Low Preload preset applied! Compliance values updated.",
-                "lungProblem": "Lung Problem preset applied! No compliance changes were needed.",
-                "heartFailure": "Heart Failure preset applied! Heart rate and compliance updated."
-            };
-    
-            // Set dynamic modal text
-            modalText.innerText = messages[condition] || "Preset applied successfully!";
-            
-            // Display the modal
-            modal.style.display = "block";
-    
-            // Close modal when clicking '×' or outside the modal
-            document.getElementById("modal-close").onclick = function () {
-                modal.style.display = "none";
-            };
-            window.onclick = function (event) {
-                if (event.target === modal) {
-                    modal.style.display = "none";
-                }
-            };
-        }
     </script>    
-
 </body>
 </html>

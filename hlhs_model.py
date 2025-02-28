@@ -1,6 +1,24 @@
-# Get Dependencies  
+# Get Dependencies
 import scipy.optimize
 
+# default compliance values
+C_d = 0.02   # eventually have different values e.g. decreased contractility, described qualitatively
+C_s = .0001
+C_sa = 1/135
+C_pv = 30 * C_sa
+C_pa = 2 * C_sa
+
+# # default inputs
+# UVR = 60
+# LVR = 40
+# PVR = 10
+# HR = 150 
+# S_sa = 0.99 # give narrow interval: .98 - 1 assuming lungs are healthy
+# Hb = 15.0
+# CVO2u = 70
+# CVO2l = 50
+
+# ADD VOLUME VARIABLE/SLIDER
 # Function to update compliance values dynamically for preset conditions
 def update_compliance(new_C_d, new_C_s, new_C_sa, new_C_pv, new_C_pa):
     global C_d, C_s, C_sa, C_pv, C_pa
@@ -9,24 +27,8 @@ def update_compliance(new_C_d, new_C_s, new_C_sa, new_C_pv, new_C_pa):
     C_sa = new_C_sa
     C_pv = new_C_pv
     C_pa = new_C_pa
-    print(f"Updated Compliance: C_d={C_d}, C_s={C_s}, C_sa={C_sa}, C_pv={C_pv}, C_pa={C_pa}")
-
-# inputs
-UVR = 45/1.3
-LVR = 35/1.3
-PVR = 10/1.3
-HR = 150 
-S_sa = 0.99 # give narrow interval: .98 - 1 assuming lungs are healthy
-Hb = 15.0
-CVO2u = 70
-CVO2l = 50
-
-# built-in
-C_d = 0.02   # eventually have different values e.g. decreased contractility, described qualitatively
-C_s = .0001
-C_sa = 1/135
-C_pv = 30 * C_sa
-C_pa = 2 * C_sa
+    print(f"function Updated compliance values: C_d={C_d}, C_s={C_s}, C_sa={C_sa}, C_pv={C_pv}, C_pa={C_pa}")
+    return C_d, C_s, C_sa, C_pv, C_pa
 
 def fun_flows(variables, *param):
 
