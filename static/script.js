@@ -114,7 +114,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 console.log("Submit button clicked! Sending request to /calculate_condition_values...");
     
                 // Collect slider values
-                const sliderValues = {
+                const sliderValuesAdjusted = {
                     HR: document.getElementById("HR").value,
                     UVR: document.getElementById("UVR").value,
                     LVR: document.getElementById("LVR").value,
@@ -124,58 +124,70 @@ document.addEventListener('DOMContentLoaded', function () {
                     CVO2u: document.getElementById("CVO2u").value,
                     CVO2l: document.getElementById("CVO2l").value
                 };
+
+                // Copy of sliders for baseline
+                const sliderValuesBaseline = { ...sliderValuesAdjusted };
+
+                // Check if pulmonary disease is the selected condition (PVR = 27)
+                const pvrValue = Number(sliderValuesAdjusted.PVR);
+                let baselineLabel = "Baseline";
+
+                if (pvrValue === 27) { 
+                    // Force PVR=10 for baseline
+                    sliderValuesBaseline.PVR = 10;
+                    baselineLabel = "Baseline (PVR=10)";
+                    console.log("Pulmonary Disease detected: Baseline PVR set to 10.");
+                } else {
+                    console.log("Other condition detected: Baseline will use same PVR as adjusted.");
+                }
+
     
-                fetch("/calculate_condition_values", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/json" },
-                    body: JSON.stringify(sliderValues) // Send slider values to backend
-                })
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP error! status: ${response.status}`);
-                    }
-                    return response.json();
-                })
-                .then(result => {
-                    console.log("Backend Response:", result);
-    
-                    // Display results dynamically
+                // Fetch both results in parallel
+                Promise.all([
+                    fetch("/calculate_condition_values", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(sliderValuesAdjusted)
+                    }).then(res => res.json()),
+                    fetch("/process", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/json" },
+                        body: JSON.stringify(sliderValuesBaseline)
+                    }).then(res => res.json())
+                ])
+                .then(([adjustedResult, baselineResult]) => {
+                    console.log("With Compliance:", adjustedResult);
+                    console.log("Without Compliance:", baselineResult);
+                    
+
+                    // Build table combining both
                     document.getElementById("conditionResults").innerHTML = `
-                    <table class="table-results">
-                        <thead>
-                            <tr>
-                                <th>Parameter</th>
-                                <th>Value</th>
-                            </tr>                            
-                        </thead>
-                        <tbody>
-                            <tr><td>Cardiac Output (L/min)</td><td>${result.Q_v}</td></tr>
-                            <tr><td>Blood Flow to Upper Body (L/min)</td><td>${result.Q_u}</td></tr>
-                            <tr><td>Blood Flow to Lower Body (L/min)</td><td>${result.Q_l}</td></tr>
-                            <tr><td>Pulmonary Blood Flow (L/min)</td><td>${result.Q_p}</td></tr>
-                            <tr><td>Systemic Artery Pressure (mmHg)</td><td>${result.P_sa}</td></tr>
-                            <tr><td>Fontan Pressure (mmHg)</td><td>${result.P_pa}</td></tr>
-                            <tr><td>Common Atrium Pressure (mmHg)</td><td>${result.P_pv}</td></tr>
-                            <tr><td>Oxygen Saturation in Pulmonary Artery</td><td>${result.S_pa}</td></tr>                                
-                            <tr><td>Oxygen Saturation in Pulmonary Vein</td><td>${result.S_pv}</td></tr>
-                            <tr><td>Oxygen Saturation in Upper Body</td><td>${result.S_svu}</td></tr>
-                            <tr><td>Oxygen Saturation in Lower Body</td><td>${result.S_svl}</td></tr>
-                            <tr><td>Oxygen Extraction Ratio</td><td>${result.OER}</td></tr>
-                            <tr><th colspan="2">Compliance Values</th></tr>
-                            <tr><td>C_d</td><td>${result.C_d}</td></tr>
-                            <tr><td>C_s</td><td>${result.C_s}</td></tr>
-                            <tr><td>C_sa</td><td>${result.C_sa}</td></tr>
-                            <tr><td>C_pv</td><td>${result.C_pv}</td></tr>                                
-                            <tr><td>C_pa</td><td>${result.C_pa}</td></tr>
-                        </tbody>
-                    </table>
-                `;                
+                        <table class="table-results">
+                            <thead>
+                                <tr>
+                                    <th>Parameter</th>
+                                    <th>With Condition</th>
+                                    <th>${baselineLabel}</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr><td>Cardiac Output (L/min)</td><td>${adjustedResult.Q_v}</td><td>${baselineResult.Q_v}</td></tr>
+                                <tr><td>Blood Flow to Upper Body (L/min)</td><td>${adjustedResult.Q_u}</td><td>${baselineResult.Q_u}</td></tr>
+                                <tr><td>Blood Flow to Lower Body (L/min)</td><td>${adjustedResult.Q_l}</td><td>${baselineResult.Q_l}</td></tr>
+                                <tr><td>Pulmonary Blood Flow (L/min)</td><td>${adjustedResult.Q_p}</td><td>${baselineResult.Q_p}</td></tr>
+                                <tr><td>Systemic Artery Pressure (mmHg)</td><td>${adjustedResult.P_sa}</td><td>${baselineResult.P_sa}</td></tr>
+                                <tr><td>Fontan Pressure (mmHg)</td><td>${adjustedResult.P_pa}</td><td>${baselineResult.P_pa}</td></tr>
+                                <tr><td>Common Atrium Pressure (mmHg)</td><td>${adjustedResult.P_pv}</td><td>${baselineResult.P_pv}</td></tr>
+                                <tr><td>Oxygen Extraction Ratio</td><td>${adjustedResult.OER}</td><td>${baselineResult.OER}</td></tr>
+                            </tbody>
+                        </table>
+                    `;
                 })
-                .catch(error => console.error("Error fetching calculated values:", error));
+                .catch(error => console.error("Error fetching data from backend:", error));
             });
-        } else {
-            console.error("conditionSubmitBtn not found in the DOM!");
-        }
+            } else {
+                console.error("conditionSubmitBtn not found in the DOM!");
+            }
 
 // Add click functionality to the Fontan diagram
 const image = document.getElementById('clickable-image');

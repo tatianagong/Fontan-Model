@@ -238,7 +238,18 @@
                     document.getElementById(key + "Value").innerText = selectedVitals[key];
                 }
             }
-        }
+
+                // Now handle PVR disabling logic
+                const pvrSlider = document.getElementById("PVR");
+
+                if (condition === 'lungProblem') {
+                    pvrSlider.disabled = true; // disable slider
+                    pvrSlider.classList.add('disabled-slider'); // Optional: add visual cue
+                } else {
+                    pvrSlider.disabled = false; // re-enable slider
+                    pvrSlider.classList.remove('disabled-slider'); // Remove visual cue if present
+                }
+            }
 
         function applyPreset(condition) {
             fetch(`/apply_preset?condition=${condition}`)
