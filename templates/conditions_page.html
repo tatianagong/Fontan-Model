@@ -120,7 +120,7 @@
     <!--Buttons for Preset Conditions-->
     <div class="button-container">
         <button onclick="setVitalsAndApply('lowPreload')">Low Preload</button>
-        <button onclick="setVitalsAndApply('lungProblem')">Lung Problem</button>
+        <button onclick="setVitalsAndApply('lungProblem')">Pulmonary Disease</button>
         <button onclick="setVitalsAndApply('heartFailure')">Heart Failure</button>
     </div>
 
@@ -144,7 +144,7 @@
 
         <!--PVR Slider-->
         <label for="PVR">Pulmonary Vascular Resistance (Wood Units):</label>
-        <input type="range" id="PVR" name="PVR" min="5" max="20" step="1" value="10" oninput="updateValue('PVRValue', this.value)">
+        <input type="range" id="PVR" name="PVR" min="5" max="45" step="1" value="10" oninput="updateValue('PVRValue', this.value)">
         <span id="PVRValue">10</span><br><br>
 
         <!--S_sa Slider-->
@@ -170,7 +170,7 @@
     <p id="result"></p>
     <a href="/"><button>Back to Home</button></a>
 
-    <!-- Submit button now calls submitConditionForm() instead of /process-->
+    <!-- Submit button now calls /calculate_condition_values instead of /process-->
     <button type="button" id="conditionSubmitBtn">Submit</button>
     <div id="conditionResults"></div>
 
@@ -208,7 +208,7 @@
                     HR: 100,
                     UVR: 45,
                     LVR: 35,
-                    PVR: 20,
+                    PVR: 27,
                     S_sa: 0.99,
                     Hb: 15,
                     CVO2u: 70,

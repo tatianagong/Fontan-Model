@@ -91,3 +91,24 @@ button:hover {
         max-width: 300px;
     }
 }
+
+/* General Table Styles */
+.table-results {
+    border-collapse: collapse;
+    margin-top: 30px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* Style table headers and cells */
+.table-results th, 
+.table-results td {
+    text-align: left;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+/* Header background */
+.table-results th {
+    background-color: #f2f2f2;
+}

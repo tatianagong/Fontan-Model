@@ -141,76 +141,41 @@ document.addEventListener('DOMContentLoaded', function () {
     
                     // Display results dynamically
                     document.getElementById("conditionResults").innerHTML = `
-                        <strong>Cardiac Output:</strong> ${result.Q_v} L/min<br>
-                        <strong>Blood Flow to Upper Body:</strong> ${result.Q_u} L/min<br>
-                        <strong>Blood Flow to Lower Body:</strong> ${result.Q_l} L/min<br>
-                        <strong>Pulmonary Blood Flow:</strong> ${result.Q_p} L/min<br>
-                        <strong>Systemic Artery Pressure:</strong> ${result.P_sa} mmHg<br>
-                        <strong>Pulmonary Artery Pressure:</strong> ${result.P_pa} mmHg<br>
-                        <strong>Pulmonary Vein Pressure:</strong> ${result.P_pv} mmHg<br>
-                        <strong>Oxygen Saturation in Pulmonary Artery:</strong> ${result.S_pa}<br>
-                        <strong>Oxygen Saturation in Pulmonary Vein:</strong> ${result.S_pv}<br>
-                        <strong>Oxygen Saturation in Upper Body:</strong> ${result.S_svu}<br>
-                        <strong>Oxygen Saturation in Lower Body:</strong> ${result.S_svl}<br>
-                        <strong>Oxygen Extraction Ratio:</strong> ${result.OER}<br>
-                        <strong>Compliance Values:</strong><br>
-                        C_d: ${result.C_d}<br>
-                        C_s: ${result.C_s}<br>
-                        C_sa: ${result.C_sa}<br>
-                        C_pv: ${result.C_pv}<br>
-                        C_pa: ${result.C_pa}<br>
-                    `;
+                    <table class="table-results">
+                        <thead>
+                            <tr>
+                                <th>Parameter</th>
+                                <th>Value</th>
+                            </tr>                            
+                        </thead>
+                        <tbody>
+                            <tr><td>Cardiac Output (L/min)</td><td>${result.Q_v}</td></tr>
+                            <tr><td>Blood Flow to Upper Body (L/min)</td><td>${result.Q_u}</td></tr>
+                            <tr><td>Blood Flow to Lower Body (L/min)</td><td>${result.Q_l}</td></tr>
+                            <tr><td>Pulmonary Blood Flow (L/min)</td><td>${result.Q_p}</td></tr>
+                            <tr><td>Systemic Artery Pressure (mmHg)</td><td>${result.P_sa}</td></tr>
+                            <tr><td>Fontan Pressure (mmHg)</td><td>${result.P_pa}</td></tr>
+                            <tr><td>Common Atrium Pressure (mmHg)</td><td>${result.P_pv}</td></tr>
+                            <tr><td>Oxygen Saturation in Pulmonary Artery</td><td>${result.S_pa}</td></tr>                                
+                            <tr><td>Oxygen Saturation in Pulmonary Vein</td><td>${result.S_pv}</td></tr>
+                            <tr><td>Oxygen Saturation in Upper Body</td><td>${result.S_svu}</td></tr>
+                            <tr><td>Oxygen Saturation in Lower Body</td><td>${result.S_svl}</td></tr>
+                            <tr><td>Oxygen Extraction Ratio</td><td>${result.OER}</td></tr>
+                            <tr><th colspan="2">Compliance Values</th></tr>
+                            <tr><td>C_d</td><td>${result.C_d}</td></tr>
+                            <tr><td>C_s</td><td>${result.C_s}</td></tr>
+                            <tr><td>C_sa</td><td>${result.C_sa}</td></tr>
+                            <tr><td>C_pv</td><td>${result.C_pv}</td></tr>                                
+                            <tr><td>C_pa</td><td>${result.C_pa}</td></tr>
+                        </tbody>
+                    </table>
+                `;                
                 })
                 .catch(error => console.error("Error fetching calculated values:", error));
             });
         } else {
             console.error("conditionSubmitBtn not found in the DOM!");
         }
-
-//     const conditionBtn = document.getElementById("conditionSubmitBtn");
-
-//     if (conditionBtn) {
-//         conditionBtn.addEventListener("click", function () {
-//             console.log("Submit button clicked! Sending request to /calculate_condition_values...");
-
-//             fetch("/calculate_condition_values")  // Calls the new Flask route
-//             .then(response => response.json())
-//             .then(result => {
-//                 console.log("Backend Response:", result);
-
-//                 if (result.error) {
-//                     document.getElementById("conditionResults").innerHTML = `<p style="color: red;">Error: ${result.error}</p>`;
-//                     return;
-//                 }
-
-//                 // Display computed values
-//                 document.getElementById("conditionResults").innerHTML = `
-//                     <strong>Q_v:</strong> ${result.Q_v} L/min<br>
-//                     <strong>Q_u:</strong> ${result.Q_u} L/min<br>
-//                     <strong>Q_l:</strong> ${result.Q_l} L/min<br>
-//                     <strong>Q_p:</strong> ${result.Q_p} L/min<br>
-//                     <strong>P_sa:</strong> ${result.P_sa} mmHg<br>
-//                     <strong>P_pa:</strong> ${result.P_pa} mmHg<br>
-//                     <strong>P_pv:</strong> ${result.P_pv} mmHg<br>
-//                     <strong>S_pa:</strong> ${result.S_pa}<br>
-//                     <strong>S_pv:</strong> ${result.S_pv}<br>
-//                     <strong>S_svu:</strong> ${result.S_svu}<br>
-//                     <strong>S_svl:</strong> ${result.S_svl}<br>
-//                     <strong>OER:</strong> ${result.OER}<br>
-//                     <strong>Compliance Values:</strong><br>
-//                     C_d: ${result.C_d}<br>
-//                     C_s: ${result.C_s}<br>
-//                     C_sa: ${result.C_sa}<br>
-//                     C_pv: ${result.C_pv}<br>
-//                     C_pa: ${result.C_pa}<br>
-//                 `;
-//             })
-//             .catch(error => console.error("Error fetching calculated values:", error));
-//         });
-//     } else {
-//         console.error("conditionSubmitBtn not found in the DOM!");
-//     }
-// });
 
 // Add click functionality to the Fontan diagram
 const image = document.getElementById('clickable-image');
