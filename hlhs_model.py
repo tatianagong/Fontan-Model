@@ -2,8 +2,8 @@
 import scipy.optimize
 
 # default compliance values
-C_d = 0.02   # eventually have different values e.g. decreased contractility, described qualitatively
-C_s = .0001
+C_d = 2/100       # 30C_s
+C_s = .01/100       # from TGA
 C_sa = 1/135
 C_pv = 30 * C_sa
 C_pa = 2 * C_sa

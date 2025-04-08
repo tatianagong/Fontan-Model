@@ -481,7 +481,7 @@ def apply_preset():
         "lungProblem": {
             # no compliance changes
             "HR": 100, "UVR": 45, "LVR": 35, "PVR": 27, "S_sa": 0.99, "Hb": 15, "CVO2u": 70, "CVO2l": 50,
-            "C_d": 2/100, "C_s": 0.01/100, "C_sa": 1/135, "C_pv": 30/135, "C_pa": 2/135
+            "C_d": 0.02241, "C_s": 0.00008625, "C_sa": 0.005115, "C_pv": 0.2986, "C_pa": 0.01481
         },
         "heartFailure": {
             # C_d decreased by 20%, C_s increased by 20%, other compliances remain the same
