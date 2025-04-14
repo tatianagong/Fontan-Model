@@ -83,9 +83,18 @@ function setupSliderPage() {
     const form = document.getElementById('parameterForm');
     if (!form) return;
 
+    // Create a container for the results table if it doesn't exist
+    let resultsContainer = document.getElementById('sliderResults');
+    if (!resultsContainer) {
+        resultsContainer = document.createElement('div');
+        resultsContainer.id = 'sliderResults';
+        form.appendChild(resultsContainer);
+    }
+
     form.addEventListener('submit', function(event) {
         event.preventDefault();
 
+        // collect slider values
         const HR = document.getElementById('HR').value;
         const UVR = document.getElementById('UVR').value;
         const LVR = document.getElementById('LVR').value;
@@ -102,18 +111,28 @@ function setupSliderPage() {
         })
         .then(response => response.json())
         .then(data => {
-            const resultDiv = document.getElementById('result');
-            if (resultDiv) {
-                resultDiv.innerHTML = `
-                    <p>Cardiac Output (L/min): ${data.Q_v}</p>
-                    <p>Blood Flow into the Upper Body (L/min): ${data.Q_u}</p>
-                    <p>Blood Flow into the Lower Body (L/min): ${data.Q_l}</p>
-                    <p>Blood Flow into the Lungs (L/min): ${data.Q_p}</p>
-                    <p>Pressure of the Systemic Artery (mmHg): ${data.P_sa}</p>
-                    <p>Oxygen Extraction Ratio: ${data.OER}</p>
-                `;
-            }
-        })
+           // Generate single-column results table
+           resultsContainer.innerHTML = `
+           <table class="results-table">
+               <thead>
+                   <tr>
+                       <th>Output Parameter</th>
+                       <th>Value</th>
+                   </tr>
+               </thead>
+               <tbody>
+                   <tr><td>Cardiac Output (L/min)</td><td>${data.Q_v}</td></tr>
+                   <tr><td>Upper Body Flow (L/min)</td><td>${data.Q_u}</td></tr>
+                   <tr><td>Lower Body Flow (L/min)</td><td>${data.Q_l}</td></tr>
+                   <tr><td>Pulmonary Flow (L/min)</td><td>${data.Q_p}</td></tr>
+                   <tr><td>Systemic Artery Pressure (mmHg)</td><td>${data.P_sa}</td></tr>
+                   <tr><td>Fontan Pressure (mmHg)</td><td>${data.P_pa}</td></tr>
+                   <tr><td>Common Atrium Pressure (mmHg)</td><td>${data.P_pv}</td></tr>
+                   <tr><td>Oxygen Extraction Ratio</td><td>${data.OER}</td></tr>
+               </tbody>
+           </table>
+       `;
+   })
         .catch(error => console.error('Error:', error));
     });
 }
@@ -182,7 +201,7 @@ function setupConditionsPage() {
             const resultsDiv = document.getElementById("conditionResults");
             if (resultsDiv) {
                 resultsDiv.innerHTML = `
-                    <table class="table-results">
+                    <table class="results-table">
                         <thead>
                             <tr>
                                 <th>Parameter</th>
