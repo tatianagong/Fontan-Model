@@ -10,24 +10,29 @@ function updateValue(displayId, value) {
 }
 
 function showConfirmationModal(condition) {
+    console.log("Modal invoked with condition:", condition);
+
     const modal = document.getElementById("confirmation-modal");
     const modalText = document.getElementById("modal-text");
 
     if (modal && modalText) {
         const messages = {
-            "lowPreload": "Low Preload preset applied! Low preload refers to a reduced volume of blood returning to the heart, which limits the heart's ability to fill and pump effectively. This can occur due to hemorrhage, where blood is lost from the circulatory system; dehydration, which reduces overall intravascular volume; or obstruction, where physical barriers like tension pneumothorax or cardiac tamponade impede venous return. In each of these scenarios, the heart receives less blood during diastole, resulting in decreased stroke volume and cardiac output.",
-            "lungProblem": "Lung Problem preset applied! Pulmonary diseases increase pulmonary vascular resistance, making it harder for blood to flow into the lungs. This reduces preload to the single ventricle, leading to decreased cardiac output. Even mild lung disease can have a major impact in Fontan patients due to their delicate hemodynamics.",
-            "heartFailure": "Heart Failure preset applied! In Fontan circulation, heart failure can develop due to the unique strain placed on the single functioning ventricle and the passive nature of pulmonary blood flow. Over time, the single ventricle may struggle to maintain adequate cardiac output. Ventricular dysfunction—whether systolic or diastolic—further compromises forward flow, leading to systemic congestion, exercise intolerance, and fatigue."
+            lowPreload: "Low Preload preset applied! Low preload refers to a reduced volume of blood returning to the heart, which limits the heart's ability to fill and pump effectively. This can occur due to hemorrhage, where blood is lost from the circulatory system; dehydration, which reduces overall intravascular volume; or obstruction, where physical barriers like tension pneumothorax or cardiac tamponade impede venous return. In each of these scenarios, the heart receives less blood during diastole, resulting in decreased stroke volume and cardiac output.",
+            lungProblem: "Lung Problem preset applied! Pulmonary diseases increase pulmonary vascular resistance, making it harder for blood to flow into the lungs. This reduces preload to the single ventricle, leading to decreased cardiac output. Even mild lung disease can have a major impact in Fontan patients due to their delicate hemodynamics.",
+            heartFailure: "Heart Failure preset applied! In Fontan circulation, heart failure can develop due to the unique strain placed on the single functioning ventricle and the passive nature of pulmonary blood flow. Over time, the single ventricle may struggle to maintain adequate cardiac output. Ventricular dysfunction—whether systolic or diastolic—further compromises forward flow, leading to systemic congestion, exercise intolerance, and fatigue."
         };
 
-        modalText.innerText = messages[condition] || "Preset applied successfully!";
+        // Normalize in case the condition is not exact
+        const normalized = condition.trim();
+
+        modalText.innerText = messages[normalized] || "Preset applied successfully!";
         modal.style.display = "block";
 
-        document.getElementById("modal-close").onclick = function() {
+        document.getElementById("modal-close").onclick = function () {
             modal.style.display = "none";
         };
-        
-        window.onclick = function(event) {
+
+        window.onclick = function (event) {
             if (event.target === modal) {
                 modal.style.display = "none";
             }

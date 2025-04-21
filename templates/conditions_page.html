@@ -119,9 +119,9 @@
 
     <!--Buttons for Preset Conditions-->
     <div class="button-container">
-        <button onclick="setVitalsAndApply('lowPreload')">Low Preload</button>
-        <button onclick="setVitalsAndApply('lungProblem')">Pulmonary Disease</button>
-        <button onclick="setVitalsAndApply('heartFailure')">Heart Failure</button>
+        <button class="preset-btn" onclick="setVitalsAndApply('lowPreload')">Low Preload</button>
+        <button class="preset-btn" onclick="setVitalsAndApply('lungProblem')">Pulmonary Disease</button>
+        <button class="preset-btn" onclick="setVitalsAndApply('heartFailure')">Heart Failure</button>
     </div>
 
     <!-- Sliders -->
@@ -193,7 +193,8 @@
         function setVitalsAndApply(condition) {
             setVitals(condition); // update sliders immediately
             applyPreset(condition); // send request to Flask backend
-            showConfirmationModal(condition);
+            showConfirmationModal(condition)
+            highlightSelectedButton(condition);
         }
 
         function setVitals(condition) {
@@ -279,6 +280,16 @@
                 showConfirmationModal(condition);
             })
             .catch(error => console.error("Error applying preset:", error));
+        }
+
+        function highlightSelectedButton(condition) {
+            document.querySelectorAll('.preset-btn').forEach(btn => {
+                if (btn.getAttribute('onclick')?.includes(condition)) {
+                    btn.classList.add('selected');
+                } else {
+                    btn.classList.remove('selected');
+                }
+            });
         }
     </script>    
 </body>
