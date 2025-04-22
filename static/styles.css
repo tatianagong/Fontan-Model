@@ -6,9 +6,11 @@ body {
   background-color: #f8f9fa;
   color: #212529;
   text-align: center;
-  margin: 0 auto;
+  margin: 0;
   padding: 20px;
   max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 /* =======================
@@ -27,14 +29,15 @@ form {
 
 label {
   font-weight: bold;
-  margin-top: 15px;
+  margin-top: -6px;
   display: block;
   color: #343a40;
 }
 
 input[type="range"] {
   width: 100%;
-  margin-top: 5px;
+  margin-top: -6px;
+  margin-bottom: -6px; /* tighten spacing below slider */
 }
 
 /* =======================
@@ -217,8 +220,46 @@ button:hover {
   max-width: 700px;
 }
 
+/* =======================
+Preset Button Highlighting 
+======================= */
+
 .preset-btn.selected {
   background-color: #343a40 !important;
   color: #ffffff !important;
   border: 2px solid #000;
+}
+
+/* =======================
+ Page Layout on Pages with Sliders
+======================= */
+
+.flex-container {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0;
+  margin: 0 auto;
+}
+
+.two-column-layout .image-container {
+  flex: 1;
+  align-items: flex-start;
+  justify-content: flex-start;
+  display: flex;
+  padding: 0;
+  margin: 0;
+}
+
+.two-column-layout .image-container img {
+  width: auto;
+  max-width: 100%;
+  margin: 0 auto;
+}
+
+.card {
+  flex: 2.5; 
+  min-width: 300px;
+  max-width: 450px;
 }
