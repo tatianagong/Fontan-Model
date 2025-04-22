@@ -7,8 +7,8 @@
     <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
 </head>
 <body class="two-column-layout">
-    <h1>Preset Conditions</h1>
-    <p>Select the clinical condition you want to simulate in a patient with Fontan physiology. You can adjust the sliders as desired, then click submit. The resulting table will display two columns: one showing the vitals of a patient with the selected condition and the other showing baseline vitals without the condition. This side-by-side comparison makes it easier to observe the impact of the clinical condition.</p>
+    <h1>Simulate Clinical Conditions</h1>
+    <p>This page allows you to simulate common clinical conditions in Fontan patients. The adjustable parameters reflect physiological factors that can be influenced by clinical interventions such as milrinone, epinephrine, and vasodilators. After making any desired adjustments, click Submit. The resulting table compares patient vitals with and without the selected condition, helping to visualize the physiological effects of common clinical conditions more clearly.</p>
 
     <!--Buttons for Preset Conditions-->
     <div class="button-container">
@@ -85,7 +85,7 @@
         
         <!-- Sliders -->
         <div class="card">
-            <h2>Inputs Patient Vitals</h2>
+            <h2>Adjust Parameters</h2>
             <form id="parameterForm">
                 <!--Heart Rate Slider-->
                 <label for="HR">Heart Rate (beats/min):</label>
