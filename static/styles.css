@@ -135,12 +135,13 @@ button:hover {
   border-collapse: collapse;
   margin: 30px auto;
   font-size: 0.95em;
-  width: 90%;
+  width: 100%;
   max-width: 850px;
   background: white;
   border-radius: 12px;
   overflow: hidden;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+  box-sizing: border-box;
 }
 
 .results-table thead tr {
@@ -151,7 +152,7 @@ button:hover {
 
 .results-table th,
 .results-table td {
-  padding: 14px 18px;
+  padding: 8px 8px;
   border: 1px solid #dee2e6;
   vertical-align: middle;
 }
@@ -211,15 +212,6 @@ button:hover {
   }
 }
 
-.card {
-  background: white;
-  border-radius: 12px;
-  padding: 25px;
-  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
-  margin: 30px auto;
-  max-width: 700px;
-}
-
 /* =======================
 Preset Button Highlighting 
 ======================= */
@@ -238,28 +230,54 @@ Preset Button Highlighting
   width: 100%;
   display: flex;
   justify-content: center;
-  align-items: center;
-  padding: 0;
-  margin: 0 auto;
+  align-items: flex-start;
+  margin-top: 30px;
+  flex-wrap: nowrap;
+  gap: 20px;
 }
 
-.two-column-layout .image-container {
-  flex: 1;
-  align-items: flex-start;
-  justify-content: flex-start;
-  display: flex;
-  padding: 0;
+.left-column {
+  flex: 0 0 33%;
+  min-width: 0;
+}
+
+.three-column-layout .left-column img {
+  width: auto;
+  max-width: 100%;
   margin: 0;
 }
 
-.two-column-layout .image-container img {
-  width: auto;
-  max-width: 100%;
-  margin: 0 auto;
+.middle-column,
+.right-column {
+  flex: 0 0 calc(33% - 10px); /* Accounts for gap */
+  flex-direction: column;
+  min-width: 0;
+  justify-content: center;
+  align-items: center;
+  display: flex;
+}
+.middle-column .card{
+  width: 100%;
 }
 
 .card {
-  flex: 2.5; 
+  flex: 0 1 auto;
   min-width: 300px;
-  max-width: 450px;
+  max-width: 100%;
+  box-sizing: border-box;
+
+  background: white;
+  border-radius: 12px;
+  padding: 25px;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+
+  padding: 25px;
+  margin:0 ;
+}
+
+/* Fix for results table card */
+#conditionResults .card {
+  width: calc(100% - 40px); /* Account for padding */
+  margin-top: 0;
+  padding: 15px;
 }

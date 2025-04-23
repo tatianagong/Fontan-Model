@@ -117,26 +117,32 @@ function setupSliderPage() {
         .then(response => response.json())
         .then(data => {
            // Generate single-column results table
-           resultsContainer.innerHTML = `
-           <table class="results-table">
-               <thead>
-                   <tr>
-                       <th>Output Parameter</th>
-                       <th>Value</th>
-                   </tr>
-               </thead>
-               <tbody>
-                   <tr><td>Cardiac Output (L/min)</td><td>${data.Q_v}</td></tr>
-                   <tr><td>Upper Body Flow (L/min)</td><td>${data.Q_u}</td></tr>
-                   <tr><td>Lower Body Flow (L/min)</td><td>${data.Q_l}</td></tr>
-                   <tr><td>Pulmonary Flow (L/min)</td><td>${data.Q_p}</td></tr>
-                   <tr><td>Systemic Artery Pressure (mmHg)</td><td>${data.P_sa}</td></tr>
-                   <tr><td>Fontan Pressure (mmHg)</td><td>${data.P_pa}</td></tr>
-                   <tr><td>Common Atrium Pressure (mmHg)</td><td>${data.P_pv}</td></tr>
-                   <tr><td>Oxygen Extraction Ratio</td><td>${data.OER}</td></tr>
-               </tbody>
-           </table>
-       `;
+           const resultsSiv = document.getElementById("sliderResults");
+           if (resultsSiv) {
+                resultsContainer.innerHTML = `
+                <div class="card results-card">
+                    <table class="results-table">
+                        <thead>
+                            <tr>
+                                <th>Output Parameter</th>
+                                <th>Value</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr><td>Cardiac Output (L/min)</td><td>${data.Q_v}</td></tr>
+                            <tr><td>Upper Body Flow (L/min)</td><td>${data.Q_u}</td></tr>
+                            <tr><td>Lower Body Flow (L/min)</td><td>${data.Q_l}</td></tr>
+                            <tr><td>Pulmonary Flow (L/min)</td><td>${data.Q_p}</td></tr>
+                            <tr><td>Systemic Artery Pressure (mmHg)</td><td>${data.P_sa}</td></tr>
+                            <tr><td>Fontan Pressure (mmHg)</td><td>${data.P_pa}</td></tr>
+                            <tr><td>Common Atrium Pressure (mmHg)</td><td>${data.P_pv}</td></tr>
+                            <tr><td>Oxygen Extraction Ratio</td><td>${data.OER}</td></tr>
+                        </tbody>
+                    </table>
+                </div>
+                `;
+                resultsDiv.style.display = "block";
+           }
    })
         .catch(error => console.error('Error:', error));
     });
@@ -206,6 +212,7 @@ function setupConditionsPage() {
             const resultsDiv = document.getElementById("conditionResults");
             if (resultsDiv) {
                 resultsDiv.innerHTML = `
+                <div class="card results-card">
                     <table class="results-table">
                         <thead>
                             <tr>
@@ -225,7 +232,9 @@ function setupConditionsPage() {
                             <tr><td>Oxygen Extraction Ratio</td><td>${adjustedResult.OER}</td><td>${baselineResult.OER}</td></tr>
                         </tbody>
                     </table>
+                </div>
                 `;
+                resultsDiv.style.display = "block";
             }
         })
         .catch(error => console.error("Error fetching data:", error));
