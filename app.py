@@ -84,24 +84,32 @@ def process():
         "OER": round(OER, 2),
     })
 
-from fontan_plots import plotCO, plotQU, plotQL, plotQP,plotPSA,plotOER
+from fontan_plots import plotCO, plotQU, plotQL, plotQP,plotPSA,plotOER, plotPPV, plotPPA, plotSPA,plotSPV,plotSSVL,plotSSVU
 COs=plotCO()
 QUs=plotQU()
 QLs=plotQL()
 QPs=plotQP()
 PSAs=plotPSA()
 OERs=plotOER()
+PPVs=plotPPV()
+PPAs=plotPPA()
+SPAs=plotSPA()
+SPVs=plotSPV()
+SSVUs=plotSSVU()
+SSVLs=plotSSVL()
 # Route to generate a plot based on user selection
 @app.route('/generate_plot')
 def generate_plot():
 
     plot_type = request.args.get('plot_type')
+
     
     # Generate the selected plot
     if plot_type == 'CO':
         fig, ax = plt.subplots(figsize=(10, 8))
         normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
 
+        
         excluded_params = {
             "Oxygen Consumption of Upper Body",
             "Oxygen Consumption of Lower Body",
@@ -133,13 +141,16 @@ def generate_plot():
                 baseline_value, unit = baseline_value
 
                 # Format the legend label with the baseline value and unit
-                label = f"{param_name} (Baseline: {baseline_value} {unit})"
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
                 ######
                 ax.plot(normalized_range, cardiac_outputs, label=label)
 
-        ax.set_title('Cardiac Output vs. Parameter Variation')
+        ax.set_title("Cardiac Output vs. Parameter Variation")
+
+        
+        
         ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
-        ax.set_ylabel("Cardiac Output (CO) [L/min]")
+        ax.set_ylabel("Cardiac Output [L/min]")
         ax.legend(title="Parameters", loc='upper right')
         ax.grid(True)
 
@@ -176,14 +187,14 @@ def generate_plot():
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
-                label = f"{param_name} (Baseline: {baseline_value} {unit})"
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
 
                 ######
                 ax.plot(normalized_range, QU_outputs, label=label)
 
-        ax.set_title('Upper Body Blood Flow (Q_u) vs. Parameter Variation')
+        ax.set_title('Upper Body Blood Flow vs. Parameter Variation')
         ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
-        ax.set_ylabel("Upper Body Flow (Q_u) [L/min]")
+        ax.set_ylabel("Upper Body Flow [L/min]")
         ax.legend(title="Parameters", loc='upper right')
         ax.grid(True)
 
@@ -220,14 +231,14 @@ def generate_plot():
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
-                label = f"{param_name} (Baseline: {baseline_value} {unit})"
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
 
                 ######
                 ax.plot(normalized_range, QL_outputs, label=label)
 
-        ax.set_title('Lower Body Blood Flow (Q_l) vs. Parameter Variation')
+        ax.set_title('Lower Body Blood Flow vs. Parameter Variation')
         ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
-        ax.set_ylabel("Lower Body Flow (Q_l) [L/min]")
+        ax.set_ylabel("Lower Body Flow [L/min]")
         ax.legend(title="Parameters", loc='upper right')
         ax.grid(True)
     
@@ -264,14 +275,14 @@ def generate_plot():
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
-                label = f"{param_name} (Baseline: {baseline_value} {unit})"
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
 
                 ######
                 ax.plot(normalized_range, QP_outputs, label=label)
 
-        ax.set_title('Pulmonary Blood Flow (Q_p) vs. Parameter Variation')
+        ax.set_title('Pulmonary Blood Flow vs. Parameter Variation')
         ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
-        ax.set_ylabel("Pulmonary Flow (Q_p) [L/min]")
+        ax.set_ylabel("Pulmonary Flow [L/min]")
         ax.legend(title="Parameters", loc='upper right')
         ax.grid(True)
     
@@ -308,14 +319,275 @@ def generate_plot():
                                 }[param_name]
                 baseline_value, unit = baseline_value
                 # Format the legend label with the baseline value and unit
-                label = f"{param_name} (Baseline: {baseline_value} {unit})"
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
 
                 ######
                 ax.plot(normalized_range, PSA_outputs, label=label)
 
-        ax.set_title('Systemic Arterial Pressure (P_sa) vs. Parameter Variation')
+        ax.set_title('Systemic Arterial Pressure vs. Parameter Variation')
         ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
-        ax.set_ylabel("Systemic Arterial Pressure (P_sa) [mmHg]")
+        ax.set_ylabel("Systemic Arterial Pressure [mmHg]")
+        ax.legend(title="Parameters", loc='upper right')
+        ax.grid(True)
+    
+    elif plot_type == 'P_pa':
+        fig, ax = plt.subplots(figsize=(10, 8))
+        normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
+
+        excluded_params = {
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
+        }
+
+        for param_name, PPA_outputs in PPAs.items():
+            if param_name not in excluded_params:
+
+                baseline_value = {
+                                    "Heart Rate": (100, "beats/min"),
+                                    "Upper Body Resistance": (45, "Wood Units"),
+                                    "Lower Body Resistance": (35, "Wood Units"),
+                                    "Pulmonary Resistance": (10, "Wood Units"),
+                                    "Systemic Arterial Oxygen Saturation": (0.99, "%"),
+                                    "Hemoglobin Concentration": (15, "g/dL"),
+                                    "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
+                                    "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
+                                    # Added missing compliance parameters
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
+                                }[param_name]
+                baseline_value, unit = baseline_value
+                # Format the legend label with the baseline value and unit
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
+
+                ######
+                ax.plot(normalized_range, PPA_outputs, label=label)
+
+        ax.set_title('Pulmonary Arterial Pressure vs. Parameter Variation')
+        ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
+        ax.set_ylabel("Pulmonary Arterial Pressure [mmHg]")
+        ax.legend(title="Parameters", loc='upper right')
+        ax.grid(True)
+
+    elif plot_type == 'P_pv':
+        fig, ax = plt.subplots(figsize=(10, 8))
+        normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
+
+        excluded_params = {
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
+        }
+
+        # Iterate over each parameter's CO values and plot them
+        for param_name, PPV_outputs in PPVs.items():
+            if param_name not in excluded_params:
+
+                baseline_value = {
+                                    "Heart Rate": (100, "beats/min"),
+                                    "Upper Body Resistance": (45, "Wood Units"),
+                                    "Lower Body Resistance": (35, "Wood Units"),
+                                    "Pulmonary Resistance": (10, "Wood Units"),
+                                    "Systemic Arterial Oxygen Saturation": (0.99, "%"),
+                                    "Hemoglobin Concentration": (15, "g/dL"),
+                                    "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
+                                    "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
+                                    # Added missing compliance parameters
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
+                                }[param_name]
+                baseline_value, unit = baseline_value
+                # Format the legend label with the baseline value and unit
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
+
+                ######
+                ax.plot(normalized_range, PPV_outputs, label=label)
+
+        ax.set_title('Pressure in the Pulmonary Vein vs. Parameter Variation')
+        ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
+        ax.set_ylabel("Pressure in the Pulmonary Vein [mmHg]")
+        ax.legend(title="Parameters", loc='upper right')
+        ax.grid(True)
+
+
+    elif plot_type == 'S_pa':
+        fig, ax = plt.subplots(figsize=(10, 8))
+        normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
+
+        excluded_params = {
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
+        }
+
+        for param_name, SPA_outputs in SPAs.items():
+            if param_name not in excluded_params:
+
+                baseline_value = {
+                                    "Heart Rate": (100, "beats/min"),
+                                    "Upper Body Resistance": (45, "Wood Units"),
+                                    "Lower Body Resistance": (35, "Wood Units"),
+                                    "Pulmonary Resistance": (10, "Wood Units"),
+                                    "Systemic Arterial Oxygen Saturation": (0.99, "%"),
+                                    "Hemoglobin Concentration": (15, "g/dL"),
+                                    "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
+                                    "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
+                                    # Added missing compliance parameters
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
+                                }[param_name]
+                baseline_value, unit = baseline_value
+                # Format the legend label with the baseline value and unit
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
+
+                ######
+                ax.plot(normalized_range, SPA_outputs, label=label)
+
+        ax.set_title('Oxygen Saturation in the Pulmonary Artery vs. Parameter Variation')
+        ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
+        ax.set_ylabel("Oxygen Saturation in the Pulmonary Artery")
+        ax.legend(title="Parameters", loc='upper right')
+        ax.grid(True)
+
+    elif plot_type == 'S_pv':
+        fig, ax = plt.subplots(figsize=(10, 8))
+        normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
+
+        excluded_params = {
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
+        }
+
+        for param_name, SPV_outputs in SPVs.items():
+            if param_name not in excluded_params:
+
+                baseline_value = {
+                                    "Heart Rate": (100, "beats/min"),
+                                    "Upper Body Resistance": (45, "Wood Units"),
+                                    "Lower Body Resistance": (35, "Wood Units"),
+                                    "Pulmonary Resistance": (10, "Wood Units"),
+                                    "Systemic Arterial Oxygen Saturation": (0.99, "%"),
+                                    "Hemoglobin Concentration": (15, "g/dL"),
+                                    "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
+                                    "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
+                                    # Added missing compliance parameters
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
+                                }[param_name]
+                baseline_value, unit = baseline_value
+                # Format the legend label with the baseline value and unit
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
+
+                ######
+                ax.plot(normalized_range, SPV_outputs, label=label)
+
+        ax.set_title('Oxygen Saturation in the Pulmonary Vein vs. Parameter Variation')
+        ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
+        ax.set_ylabel("Oxygen Saturation in the Pulmonary Vein")
+        ax.legend(title="Parameters", loc='upper right')
+        ax.grid(True)
+
+    elif plot_type == 'S_svu':
+        fig, ax = plt.subplots(figsize=(10, 8))
+        normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
+
+        excluded_params = {
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
+        }
+
+        for param_name, SSVU_outputs in SSVUs.items():
+            if param_name not in excluded_params:
+
+                baseline_value = {
+                                    "Heart Rate": (100, "beats/min"),
+                                    "Upper Body Resistance": (45, "Wood Units"),
+                                    "Lower Body Resistance": (35, "Wood Units"),
+                                    "Pulmonary Resistance": (10, "Wood Units"),
+                                    "Systemic Arterial Oxygen Saturation": (0.99, "%"),
+                                    "Hemoglobin Concentration": (15, "g/dL"),
+                                    "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
+                                    "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
+                                    # Added missing compliance parameters
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
+                                }[param_name]
+                baseline_value, unit = baseline_value
+                # Format the legend label with the baseline value and unit
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
+
+                ######
+                ax.plot(normalized_range, SSVU_outputs, label=label)
+
+        ax.set_title('Oxygen Saturation in the Superior Vena Cava vs. Parameter Variation')
+        ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
+        ax.set_ylabel("Oxygen Saturation in the Superior Vena Cava")
+        ax.legend(title="Parameters", loc='upper right')
+        ax.grid(True)
+
+    
+    elif plot_type == 'S_svl':
+        fig, ax = plt.subplots(figsize=(10, 8))
+        normalized_range = np.linspace(0.5, 1.5, 50)  # X-axis values from 0.5 to 1.5
+
+        excluded_params = {
+            "Oxygen Consumption of Upper Body",
+            "Oxygen Consumption of Lower Body",
+            "Hemoglobin Concentration",
+            "Systemic Arterial Oxygen Saturation"
+        }
+
+        for param_name, SSVL_outputs in SSVLs.items():
+            if param_name not in excluded_params:
+
+                baseline_value = {
+                                    "Heart Rate": (100, "beats/min"),
+                                    "Upper Body Resistance": (45, "Wood Units"),
+                                    "Lower Body Resistance": (35, "Wood Units"),
+                                    "Pulmonary Resistance": (10, "Wood Units"),
+                                    "Systemic Arterial Oxygen Saturation": (0.99, "%"),
+                                    "Hemoglobin Concentration": (15, "g/dL"),
+                                    "Oxygen Consumption of Upper Body": (70, "mL O2/min"),
+                                    "Oxygen Consumption of Lower Body": (50, "mL O2/min"),
+                                    # Added missing compliance parameters
+                                    "Compliance at Dia": (np.round(2 / 100,2), "mL/mmHg"),  
+                                    "Compliance at Sys": (np.round(0.01 / 100,4), "mL/mmHg"),
+                                    "Compliance of Sys Artery Over Vol": (np.round(1 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Vein Over Vol": (np.round(30 / 135,3), "mL/mmHg"),
+                                    "Compliance of Plm Artery Over Vol": (np.round(2 / 135,3), "mL/mmHg")
+                                }[param_name]
+                baseline_value, unit = baseline_value
+                # Format the legend label with the baseline value and unit
+                label = f"{param_name}"# (Baseline: {baseline_value} {unit})"
+
+                ######
+                ax.plot(normalized_range, SSVL_outputs, label=label)
+
+        ax.set_title('Oxygen Saturation in the Inferior Vena Cava vs. Parameter Variation')
+        ax.set_xlabel("Normalized Parameter Value (0.5x to 1.5x)")
+        ax.set_ylabel("Oxygen Saturation in the Inferior Vena Cava")
         ax.legend(title="Parameters", loc='upper right')
         ax.grid(True)
     

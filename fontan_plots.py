@@ -322,6 +322,316 @@ def plotPSA(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_
         PSAs[param_name] = PSA_outputs  # Store results in the dictionary
     return PSAs
 
+
+def plotPPV(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_pv, C_pa=C_pa, z0_flows=(3.1, 1.5, 1.5, 3.2, 75, 26, 2.5), S_sa=0.99, CVO2u=70, CVO2l=50, Hb=15, z0_sat=(0.55, 0.99, 0.55, 0.55)):
+    # Parameters to vary
+    parameters = {
+        "Upper Body Resistance": UVR,
+        "Lower Body Resistance": LVR,
+        "Pulmonary Resistance": PVR,
+        "Heart Rate": HR,
+        "Compliance at Dia": C_d,
+        "Compliance at Sys": C_s,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
+        "Oxygen Consumption of Upper Body": CVO2u,
+        "Oxygen Consumption of Lower Body": CVO2l,
+        "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
+        "Hemoglobin Concentration": Hb  # ✅ Added Hb
+    }
+    
+    PPVs = {param: [] for param in parameters.keys()}  # Initialize a dictionary to store results
+
+    # Normalized range for the x-axis (0.5 to 1.5)
+    normalized_range = np.linspace(0.5, 1.5, 50)
+
+    # Iterate through each parameter
+    for param_name, base_value in parameters.items():
+        PPV_outputs = []  # To store cardiac outputs for this parameter
+        
+        for factor in normalized_range:
+            # Scale the parameter value
+            scaled_value = base_value * factor
+            
+            # Create updated parameter set
+            updated_params = {**parameters, param_name: scaled_value}
+            
+            try:
+                # Calculate cardiac output
+                results = complete_results(
+                    updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
+                    updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
+                    z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
+                )
+                P_pv = results.get("P_pv", float('nan'))
+                PPV_outputs.append(P_pv)
+            except ValueError:
+                # If the solver fails, append NaN
+                PPV_outputs.append(float('nan'))
+        
+        PPVs[param_name] = PPV_outputs  # Store results in the dictionary
+    return PPVs
+
+def plotPPA(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_pv, C_pa=C_pa, z0_flows=(3.1, 1.5, 1.5, 3.2, 75, 26, 2.5), S_sa=0.99, CVO2u=70, CVO2l=50, Hb=15, z0_sat=(0.55, 0.99, 0.55, 0.55)):
+    # Parameters to vary
+    parameters = {
+        "Upper Body Resistance": UVR,
+        "Lower Body Resistance": LVR,
+        "Pulmonary Resistance": PVR,
+        "Heart Rate": HR,
+        "Compliance at Dia": C_d,
+        "Compliance at Sys": C_s,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
+        "Oxygen Consumption of Upper Body": CVO2u,
+        "Oxygen Consumption of Lower Body": CVO2l,
+        "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
+        "Hemoglobin Concentration": Hb  # ✅ Added Hb
+    }
+    
+    PPAs = {param: [] for param in parameters.keys()}  # Initialize a dictionary to store results
+
+    # Normalized range for the x-axis (0.5 to 1.5)
+    normalized_range = np.linspace(0.5, 1.5, 50)
+
+    # Iterate through each parameter
+    for param_name, base_value in parameters.items():
+        PPA_outputs = []  # To store cardiac outputs for this parameter
+        
+        for factor in normalized_range:
+            # Scale the parameter value
+            scaled_value = base_value * factor
+            
+            # Create updated parameter set
+            updated_params = {**parameters, param_name: scaled_value}
+            
+            try:
+                # Calculate cardiac output
+                results = complete_results(
+                    updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
+                    updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
+                    z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
+                )
+                P_pa = results.get("P_pa", float('nan'))
+                PPA_outputs.append(P_pa)
+            except ValueError:
+                # If the solver fails, append NaN
+                PPA_outputs.append(float('nan'))
+        
+        PPAs[param_name] = PPA_outputs  # Store results in the dictionary
+    return PPAs
+
+def plotSPA(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_pv, C_pa=C_pa, z0_flows=(3.1, 1.5, 1.5, 3.2, 75, 26, 2.5), S_sa=0.99, CVO2u=70, CVO2l=50, Hb=15, z0_sat=(0.55, 0.99, 0.55, 0.55)):
+    # Parameters to vary
+    parameters = {
+        "Upper Body Resistance": UVR,
+        "Lower Body Resistance": LVR,
+        "Pulmonary Resistance": PVR,
+        "Heart Rate": HR,
+        "Compliance at Dia": C_d,
+        "Compliance at Sys": C_s,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
+        "Oxygen Consumption of Upper Body": CVO2u,
+        "Oxygen Consumption of Lower Body": CVO2l,
+        "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
+        "Hemoglobin Concentration": Hb  # ✅ Added Hb
+    }
+    
+    SPAs = {param: [] for param in parameters.keys()}  # Initialize a dictionary to store results
+
+    # Normalized range for the x-axis (0.5 to 1.5)
+    normalized_range = np.linspace(0.5, 1.5, 50)
+
+    # Iterate through each parameter
+    for param_name, base_value in parameters.items():
+        SPA_outputs = []  # To store cardiac outputs for this parameter
+        
+        for factor in normalized_range:
+            # Scale the parameter value
+            scaled_value = base_value * factor
+            
+            # Create updated parameter set
+            updated_params = {**parameters, param_name: scaled_value}
+            
+            try:
+                # Calculate cardiac output
+                results = complete_results(
+                    updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
+                    updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
+                    z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
+                )
+                S_pa = results.get("S_pa", float('nan'))
+                SPA_outputs.append(S_pa)
+            except ValueError:
+                # If the solver fails, append NaN
+                SPA_outputs.append(float('nan'))
+        
+        SPAs[param_name] = SPA_outputs  # Store results in the dictionary
+    return SPAs
+
+
+def plotSSVU(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_pv, C_pa=C_pa, z0_flows=(3.1, 1.5, 1.5, 3.2, 75, 26, 2.5), S_sa=0.99, CVO2u=70, CVO2l=50, Hb=15, z0_sat=(0.55, 0.99, 0.55, 0.55)):
+    # Parameters to vary
+    parameters = {
+        "Upper Body Resistance": UVR,
+        "Lower Body Resistance": LVR,
+        "Pulmonary Resistance": PVR,
+        "Heart Rate": HR,
+        "Compliance at Dia": C_d,
+        "Compliance at Sys": C_s,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
+        "Oxygen Consumption of Upper Body": CVO2u,
+        "Oxygen Consumption of Lower Body": CVO2l,
+        "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
+        "Hemoglobin Concentration": Hb  # ✅ Added Hb
+    }
+    
+    SSVUs = {param: [] for param in parameters.keys()}  # Initialize a dictionary to store results
+
+    # Normalized range for the x-axis (0.5 to 1.5)
+    normalized_range = np.linspace(0.5, 1.5, 50)
+
+    # Iterate through each parameter
+    for param_name, base_value in parameters.items():
+        SSVU_outputs = []  # To store cardiac outputs for this parameter
+        
+        for factor in normalized_range:
+            # Scale the parameter value
+            scaled_value = base_value * factor
+            
+            # Create updated parameter set
+            updated_params = {**parameters, param_name: scaled_value}
+            
+            try:
+                # Calculate cardiac output
+                results = complete_results(
+                    updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
+                    updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
+                    z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
+                )
+                S_svu = results.get("S_svu", float('nan'))
+                SSVU_outputs.append(S_svu)
+            except ValueError:
+                # If the solver fails, append NaN
+                SSVU_outputs.append(float('nan'))
+        
+        SSVUs[param_name] = SSVU_outputs  # Store results in the dictionary
+    return SSVUs
+
+def plotSSVL(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_pv, C_pa=C_pa, z0_flows=(3.1, 1.5, 1.5, 3.2, 75, 26, 2.5), S_sa=0.99, CVO2u=70, CVO2l=50, Hb=15, z0_sat=(0.55, 0.99, 0.55, 0.55)):
+    # Parameters to vary
+    parameters = {
+        "Upper Body Resistance": UVR,
+        "Lower Body Resistance": LVR,
+        "Pulmonary Resistance": PVR,
+        "Heart Rate": HR,
+        "Compliance at Dia": C_d,
+        "Compliance at Sys": C_s,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
+        "Oxygen Consumption of Upper Body": CVO2u,
+        "Oxygen Consumption of Lower Body": CVO2l,
+        "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
+        "Hemoglobin Concentration": Hb  # ✅ Added Hb
+    }
+    
+    SSVLs = {param: [] for param in parameters.keys()}  # Initialize a dictionary to store results
+
+    # Normalized range for the x-axis (0.5 to 1.5)
+    normalized_range = np.linspace(0.5, 1.5, 50)
+
+    # Iterate through each parameter
+    for param_name, base_value in parameters.items():
+        SSVL_outputs = []  # To store cardiac outputs for this parameter
+        
+        for factor in normalized_range:
+            # Scale the parameter value
+            scaled_value = base_value * factor
+            
+            # Create updated parameter set
+            updated_params = {**parameters, param_name: scaled_value}
+            
+            try:
+                # Calculate cardiac output
+                results = complete_results(
+                    updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
+                    updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
+                    z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
+                )
+                S_svl = results.get("S_svl", float('nan'))
+                SSVL_outputs.append(S_svl)
+            except ValueError:
+                # If the solver fails, append NaN
+                SSVL_outputs.append(float('nan'))
+        
+        SSVLs[param_name] = SSVL_outputs  # Store results in the dictionary
+    return SSVLs
+
+
+def plotSPV(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_pv, C_pa=C_pa, z0_flows=(3.1, 1.5, 1.5, 3.2, 75, 26, 2.5), S_sa=0.99, CVO2u=70, CVO2l=50, Hb=15, z0_sat=(0.55, 0.99, 0.55, 0.55)):
+    # Parameters to vary
+    parameters = {
+        "Upper Body Resistance": UVR,
+        "Lower Body Resistance": LVR,
+        "Pulmonary Resistance": PVR,
+        "Heart Rate": HR,
+        "Compliance at Dia": C_d,
+        "Compliance at Sys": C_s,
+        "Compliance of Sys Artery Over Vol": C_sa,
+        "Compliance of Plm Vein Over Vol": C_pv,
+        "Compliance of Plm Artery Over Vol": C_pa,
+        "Oxygen Consumption of Upper Body": CVO2u,
+        "Oxygen Consumption of Lower Body": CVO2l,
+        "Systemic Arterial Oxygen Saturation": S_sa,  # ✅ Added S_sa
+        "Hemoglobin Concentration": Hb  # ✅ Added Hb
+    }
+    
+    SPVs = {param: [] for param in parameters.keys()}  # Initialize a dictionary to store results
+
+    # Normalized range for the x-axis (0.5 to 1.5)
+    normalized_range = np.linspace(0.5, 1.5, 50)
+
+    # Iterate through each parameter
+    for param_name, base_value in parameters.items():
+        SPV_outputs = []  # To store cardiac outputs for this parameter
+        
+        for factor in normalized_range:
+            # Scale the parameter value
+            scaled_value = base_value * factor
+            
+            # Create updated parameter set
+            updated_params = {**parameters, param_name: scaled_value}
+            
+            try:
+                # Calculate cardiac output
+                results = complete_results(
+                    updated_params["Upper Body Resistance"], updated_params["Lower Body Resistance"], updated_params["Pulmonary Resistance"], 
+                    updated_params["Heart Rate"], updated_params["Compliance at Dia"], updated_params["Compliance at Sys"], 
+                    updated_params["Compliance of Sys Artery Over Vol"], updated_params["Compliance of Plm Vein Over Vol"], updated_params["Compliance of Plm Artery Over Vol"], 
+                    z0_flows, updated_params["Systemic Arterial Oxygen Saturation"], updated_params["Oxygen Consumption of Upper Body"], updated_params["Oxygen Consumption of Lower Body"], updated_params["Hemoglobin Concentration"], z0_sat
+                )
+                S_pv = results.get("S_pv", float('nan'))
+                SPV_outputs.append(S_pv)
+            except ValueError:
+                # If the solver fails, append NaN
+                SPV_outputs.append(float('nan'))
+        
+        SPVs[param_name] = SPV_outputs  # Store results in the dictionary
+    return SPVs
+
+    
 def plotOER(UVR=45, LVR=35, PVR=10, HR=100, C_d=C_d, C_s=C_s, C_sa=C_sa, C_pv=C_pv, C_pa=C_pa, z0_flows=(3.1, 1.5, 1.5, 3.2, 75, 26, 2.5), S_sa=0.99, CVO2u=70, CVO2l=50, Hb=15, z0_sat=(0.55, 0.99, 0.55, 0.55)):
     # Parameters to vary
     parameters = {

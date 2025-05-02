@@ -9,8 +9,16 @@
 
 </head>
 <body>
-    <h1>Display Plot Page</h1>
-    <p>This page will display plots generated from your Fontan circulation model.</p>
+    <h1>Variable Response Plots</h1>
+    <p>Our model of the hemodynamics of a Fontan circulatory system solves for 11 variables using 13 parameters. <br><br>
+        In this page, you can select any one of the 11 variables,
+         plus the Oxygen Extraction Ratio, to generate a 2D plot. 
+         The plot will display how the selected variable changes (on the y-axis) 
+         as each of the 13 parameters changes (on the x-axis). 
+         The x-axis is normalized to represent each parameter as it goes from 0.5x to 2x its baseline value. <br><br>
+
+         Note: not all variable response plots will show all 13 parameters as not all parameters are relevant for each variable.
+          </p>
 
 
 
@@ -25,6 +33,12 @@
                 <option value="Q_p">Blood Flow into the Lungs</option>
                 <option value="P_sa">Pressure of the Systemic Artery</option>
                 <option value="OER">Oxygen Extraction Ratio</option>
+                <option value="P_pv">Pressure of the Pulmonary Vein</option>
+                <option value="P_pa">Pressure of the Pulmonary Artery</option>
+                <option value="S_pa">Oxygen Saturation in the Pulmonary Artery</option>
+                <option value="S_svu">Oxygen Saturation of Superior Vena Cava</option>
+                <option value="S_svl">Oxygen Saturation of Inferior Vena Cava</option>
+                <option value="S_pv">Oxygen Saturation in the Pulmonary Vein</option>
             </select>
             <button id="displayPlotButton">Display Plot</button>
         </div>
@@ -32,7 +46,9 @@
     </div>
 
 
+
     <a href="/"><button>Back to Home</button></a>
+
 
 
     <script src="/static/plot_script.js"></script>
